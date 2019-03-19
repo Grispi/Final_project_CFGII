@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %} {% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<style>
+table {
+    width: 100%;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+}
+th {
+  text-align: left;
+}
+</style>
+</head>
+<body>
+<nav>
+    <ul>
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
+    </ul>
+</nav>
+{% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+{% endfor %}
+<section class="content">
+    <header>
+        <h1>Your Mood History</h1>
+    </header>
+
+    <table class="post">
+        <tr >
+            <th>Mood</th>
+            <th>keyword</th>
+            <th>Date</th>
+        </tr>
+        {% for post in posts %}
+        <tr style="background-color: {{ mood_colour(post['mood']) }} ">
+            <td>{{ post['mood'] }}</td>
+            <td >{{ post['body'] }} </td>
+            <td> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
+        </tr>
+         {% endfor %}
+    </table>
+    {% block content %}{% endblock %}
+</section>
+</body>
+</html>

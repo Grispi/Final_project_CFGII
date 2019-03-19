@@ -17,7 +17,7 @@ def create_app(test_config=None):
     except OSError:
         pass
     
-    @app.route("/new", methods=["GET", "POST"])
+    @app.route("/", methods=["GET", "POST"])
     def new():
         if request.method == 'POST':
             mood = request.form["mood"]
@@ -54,7 +54,18 @@ def create_app(test_config=None):
             ' FROM post'
             ' ORDER BY created DESC'
         ).fetchall()
-        return render_template("index.html",  posts=posts)
+        return render_template("history.html",  posts=posts, mood_colour=mood_colour)
+
+    def mood_colour(mood):
+        if 'happy' == mood:
+            mood_c = '#aa80ff'
+        elif 'sad' == mood:
+            mood_c = '#b3b000'
+        elif 'love' == mood:
+            mood_c = '#668cff'
+        else:
+            mood_c = ''
+        return mood_c
 
    
     from . import db
