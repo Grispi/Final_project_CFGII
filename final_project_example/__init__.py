@@ -1,4 +1,8 @@
+# -*- coding: UTF-8 -*-
 import os
+import calendar
+import datetime
+import emoji
 from flask import Flask, render_template, request, flash, g, redirect, url_for
 from final_project_example.db import get_db
 from werkzeug.exceptions import abort
@@ -54,20 +58,52 @@ def create_app(test_config=None):
             ' FROM post'
             ' ORDER BY created DESC'
         ).fetchall()
-        return render_template("history.html",  posts=posts, mood_colour=mood_colour)
+        
+        # date_mood_time= date_mood.strftime("%d-%m-%Y")
+        cal = calendar.Calendar(6)
+        today = datetime.date.today().day
+        month = datetime.date.today().month
+        year = datetime.date.today().year
+        calmonth = cal.monthdatescalendar(year,month)
+        return render_template(
+            "history.html",  
+            posts=posts, 
+            mood_colour=mood_colour,
+            calmonth = calmonth, 
+            month = month,
+            today = today,
+            find_mood_for_date = find_mood_for_date,
+            mood_emoji = mood_emoji,
+            )
 
     def mood_colour(mood):
         if 'happy' == mood:
-            mood_c = '#aa80ff'
+            return '#aa80ff'
         elif 'sad' == mood:
-            mood_c = '#b3b000'
+            return '#b3b000'
         elif 'love' == mood:
-            mood_c = '#668cff'
+            return '#668cff'
         else:
-            mood_c = ''
-        return mood_c
+            return''
 
-   
+    def find_mood_for_date(date, posts):
+        for post in posts:
+            if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
+                return post['mood']
+        return ''
+        
+    def mood_emoji(mood):
+        if 'happy' == mood:
+            return u'😃'
+        elif 'sad' == mood:
+            return u'😥'
+        elif 'love' == mood:
+            return u'😍'
+        else:
+            return ''
+
+
+
     from . import db
     db.init_app(app)
 

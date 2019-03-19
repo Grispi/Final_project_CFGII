@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{% block title %} {% endblock %} - Flaskr</title>
+<title>{% block title %} {% endblock %}Mood</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 <style>
 table {
-    width: 100%;
+    width: 50%;
 }
 table, th, td {
   border: 1px solid black;
@@ -28,6 +28,34 @@ th {
 {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
 {% endfor %}
+<table class="post">
+    <tr>
+        <th>Sunday</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+    </tr>
+    {% for calweek in calmonth %}
+    <tr>
+
+       
+        {% for calday in calweek %}         
+
+        {% if calday.month == month %}
+
+              <td> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+
 <section class="content">
     <header>
         <h1>Your Mood History</h1>
