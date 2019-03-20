@@ -7,6 +7,8 @@ from flask import Flask, render_template, request, flash, g, redirect, url_for
 from final_project_example.db import get_db
 from werkzeug.exceptions import abort
 
+
+
 def create_app(test_config=None):
     #create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -74,15 +76,20 @@ def create_app(test_config=None):
             today = today,
             find_mood_for_date = find_mood_for_date,
             mood_emoji = mood_emoji,
+            mood_colour_cal=mood_colour_cal,
             )
+
+    happy_colour='#ffce0c'
+    sad_colour='#567477'
+    love_colour='#f4857f'
 
     def mood_colour(mood):
         if 'happy' == mood:
-            return '#aa80ff'
+            return happy_colour
         elif 'sad' == mood:
-            return '#b3b000'
+            return sad_colour
         elif 'love' == mood:
-            return '#668cff'
+            return love_colour
         else:
             return''
 
@@ -101,6 +108,28 @@ def create_app(test_config=None):
             return u'😍'
         else:
             return ''
+    
+
+    
+    def mood_colour_cal(date, posts):
+        for post in posts:
+            if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
+                mood = post['mood']
+                if 'happy' == mood:
+                    return happy_colour
+                    # return '#ef871a'
+                    # return '#ffa342'
+                elif 'sad' == mood:
+                    return sad_colour
+                    # return '#4d4d4f'
+                    # return '#2b356b'
+                elif 'love' == mood:
+                    # return '#e81717'
+                    # return  '#ffb6b2'
+                    return love_colour
+        return ''
+           
+
 
 
 
