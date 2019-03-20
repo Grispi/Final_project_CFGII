@@ -23,6 +23,7 @@ th {
 <nav>
     <ul>
             <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
+            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>  
     </ul>
 </nav>
 {% for message in get_flashed_messages() %}
@@ -74,6 +75,7 @@ th {
         </tr>
          {% endfor %}
     </table>
+    <a href= "{{ url_for('graph') }}">Your Chart</a>
     {% block content %}{% endblock %}
 </section>
 </body>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %} {% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+   <!-- import plugin script -->
+   <script src='static/Chart.min.js'></script>
+
+   <script src="https://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
+   <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+</head>
+<body>
+<nav>
+    <h1>Emoji Mood</h1>
+    <ul>
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
+            <li><a href= "{{ url_for('index') }}">All your Moods</a></li>  
+    </ul>
+</nav>
+  <div style="width:75%;">
+        <canvas id="canvas"></canvas>
+    </div>
+
+<section class="content">
+    <header>
+        <h1>Data</h1>
+        
+    </header>
+    {{ mood_labels }}
+    {{ count_mood }}
+
+    {% block content %}{% endblock %}
+</section>
+
+<script>
+    		var config = {
+    			type: 'doughnut',
+    			data: {
+    				datasets: [{
+    					data: [
+                {% for item in count_mood %}
+                "{{item}}"  ,
+                {% endfor %}
+
+    					],
+    					backgroundColor: [
+    						window.chartColors.red,
+    						// window.chartColors.orange,
+    						window.chartColors.yellow,
+    						// window.chartColors.green,
+    						window.chartColors.blue,
+    					],
+    					label: 'Dataset 1'
+    				}],
+    				labels: [
+                         {% for item in mood_labels %}
+                            "{{item}}"  ,
+                         {% endfor %}
+
+    				]
+    			},
+    			options: {
+    				responsive: true,
+    				legend: {
+    					position: 'top',
+    				},
+    				title: {
+    					display: true,
+    					text: 'Mood Chart'
+    				},
+    				animation: {
+    					animateScale: true,
+    					animateRotate: true
+    				}
+    			}
+    		};
+
+    		window.onload = function() {
+    			var ctx = document.getElementById('canvas').getContext('2d');
+    			window.myDoughnut = new Chart(ctx, config);
+    		};
+
+</script>
+
+
+
+</body>
+</html>

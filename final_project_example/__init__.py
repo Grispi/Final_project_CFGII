@@ -109,7 +109,6 @@ def create_app(test_config=None):
         else:
             return ''
     
-
     
     def mood_colour_cal(date, posts):
         for post in posts:
@@ -129,6 +128,32 @@ def create_app(test_config=None):
                     return love_colour
         return ''
            
+    @app.route("/graph", methods=["GET", "POST"])
+    def graph():
+        db = get_db()
+        posts = db.execute(
+            'SELECT mood, count(*)'
+            ' FROM post'
+            ' GROUP BY mood'
+        ).fetchall()
+        mood_labels = []
+        count_mood = []
+        for post in posts:
+           mood_labels.append(post['mood'])
+           count_mood.append(post['count(*)'])
+
+        return render_template(
+            "graph.html",  
+            posts=posts, 
+            mood_colour=mood_colour,
+            mood_emoji = mood_emoji,
+            mood_colour_cal=mood_colour_cal,
+            mood_labels = mood_labels,
+            count_mood = count_mood,
+            )
+
+
+        
 
 
 
