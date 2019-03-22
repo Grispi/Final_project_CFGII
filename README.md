@@ -15,3 +15,6 @@ After initialize the database file, you can run the python file:\
 `python -m flask run`
 
 http://flask.pocoo.org/docs/1.0/tutorial/factory/
+
+Emoji module:
+$ pip install emoji --upgrade
