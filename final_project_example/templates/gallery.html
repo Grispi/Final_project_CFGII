@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %} {% endblock %}Mood</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<style>
+
+</style>
+</head>
+<body>
+<nav>
+    <ul>
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
+            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
+    </ul>
+</nav>
+
+
+
+        {{ posts['mood'] }}
+
+
+</body>
+</html>

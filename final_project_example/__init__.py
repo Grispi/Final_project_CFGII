@@ -14,7 +14,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'final_project.sqlite'),      
+        DATABASE=os.path.join(app.instance_path, 'final_project.sqlite'),
     )
 
     # ensure the instance folder exists
@@ -22,15 +22,15 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    
+
     @app.route("/", methods=["GET", "POST"])
     def new():
         if request.method == 'POST':
             mood = request.form["mood"]
             body = request.form["body"]
             error = None
-            
-            
+
+
             if not mood:
                 error = 'Emoji is required.'
 
@@ -45,22 +45,22 @@ def create_app(test_config=None):
                     (mood, body)
                 )
                 db.commit()
-                flash( "The user is {} because {}" .format(mood , body))
+                # flash( "{} because {}" .format(mood , body))
             return redirect(url_for('index'))
         return render_template("new.html")
 
+
+
+    @app.route("/history", methods=["GET", "POST"])
+    def history():
     
-
-    @app.route("/index", methods=["GET", "POST"])
-    def index():
-
         db = get_db()
         posts = db.execute(
             'SELECT id, mood, body, created'
             ' FROM post'
             ' ORDER BY created DESC'
         ).fetchall()
-        
+    
         # date_mood_time= date_mood.strftime("%d-%m-%Y")
         cal = calendar.Calendar(6)
         today = datetime.date.today().day
@@ -68,10 +68,10 @@ def create_app(test_config=None):
         year = datetime.date.today().year
         calmonth = cal.monthdatescalendar(year,month)
         return render_template(
-            "history.html",  
-            posts=posts, 
+            "history.html",
+            posts=posts,
             mood_colour=mood_colour,
-            calmonth = calmonth, 
+            calmonth = calmonth,
             month = month,
             today = today,
             find_mood_for_date = find_mood_for_date,
@@ -98,7 +98,7 @@ def create_app(test_config=None):
             if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
                 return post['mood']
         return ''
-        
+
     def mood_emoji(mood):
         if 'happy' == mood:
             return u'😃'
@@ -108,8 +108,8 @@ def create_app(test_config=None):
             return u'😍'
         else:
             return ''
-    
-    
+
+
     def mood_colour_cal(date, posts):
         for post in posts:
             if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
@@ -127,7 +127,7 @@ def create_app(test_config=None):
                     # return  '#ffb6b2'
                     return love_colour
         return ''
-           
+
     @app.route("/graph", methods=["GET", "POST"])
     def graph():
         db = get_db()
@@ -143,29 +143,63 @@ def create_app(test_config=None):
            count_mood.append(post['count(*)'])
 
         return render_template(
-            "graph.html",  
-            posts=posts, 
+            "graph.html",
+            posts=posts,
             mood_colour=mood_colour,
             mood_emoji = mood_emoji,
             mood_colour_cal=mood_colour_cal,
             mood_labels = mood_labels,
             count_mood = count_mood,
             )
+    @app.route("/index", methods=["GET", "POST"])
+    def index():
 
+        db = get_db()
+        posts = db.execute(
+            'SELECT mood, body'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
 
-        
+        return render_template(
+            "answer.html",
+            posts=posts,
+            mood_emoji=mood_emoji,
+            )
 
+    @app.route("/gallery", methods=["GET", "POST"])
+    def gallery():
 
+        db = get_db()
+        posts = db.execute(
+            'SELECT mood'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
 
+        return render_template(
+            "gallery.html",
+            posts=posts,
+            mood_emoji=mood_emoji,
+            )
+
+    @app.route("/music", methods=["GET", "POST"])
+    def music():
+
+        db = get_db()
+        posts = db.execute(
+            'SELECT mood'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
+
+        return render_template(
+            "music.html",
+            posts=posts,
+            mood_emoji=mood_emoji,
+            )
 
     from . import db
     db.init_app(app)
 
     return app
-
-
-
-
-
-
-
