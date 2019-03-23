@@ -5,8 +5,8 @@
   </head>
   <body>
     <ul>
-          <li><a href= "{{ url_for('index') }}">All your Moods</a></li>   
-          <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>  
+          <li><a href= "{{ url_for('index') }}">All your Moods</a></li>
+          <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
     </ul>
     <div id="contact-form">
         <form action="/" method="post" >
@@ -17,10 +17,10 @@
                     <option value="sad">😥</option>
             </select>
             <br>
-            <label for="body">Keywords describe that made you feel the mood: </label>
+            <label for="body">Keywords that best describe your mood: </label>
             <textarea name="body" id="body"></textarea>
             <input type="submit" value="Save" id="submit-button">
         </form>
     </div>
   </body>
-</html> 
+</html>
