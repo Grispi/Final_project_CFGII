@@ -3,11 +3,13 @@ import os
 import calendar
 import datetime
 import emoji
+import requests
+
 from flask import Flask, render_template, request, flash, g, redirect, url_for
 from final_project_example.db import get_db
 from werkzeug.exceptions import abort
 
-
+API_KEY = "a33ea2b039e32abade45a6e1b1b87670"
 
 def create_app(test_config=None):
     #create and configure the app
@@ -53,14 +55,14 @@ def create_app(test_config=None):
 
     @app.route("/history", methods=["GET", "POST"])
     def history():
-    
+
         db = get_db()
         posts = db.execute(
             'SELECT id, mood, body, created'
             ' FROM post'
             ' ORDER BY created DESC'
         ).fetchall()
-    
+
         # date_mood_time= date_mood.strftime("%d-%m-%Y")
         cal = calendar.Calendar(6)
         today = datetime.date.today().day
@@ -172,15 +174,35 @@ def create_app(test_config=None):
 
         db = get_db()
         posts = db.execute(
-            'SELECT mood'
+            'SELECT body, mood'
             ' FROM post'
             ' ORDER BY id DESC '
         ).fetchone()
+
+        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&per_page=20&format=json&nojsoncallback=1'
+        r = requests.get(url.format(posts['body'], posts['mood'])).json()
+
+        #json_object = r.text ---> Super handy to see if I am getting data
+        #return json_object
+
+        gallery_list = list()
+
+        for item in r['photos']['photo']:
+            id = item["id"]
+            farm = item["farm"]
+            server = item["server"]
+            secret = item["secret"]
+            img_url = "https://farm{}.staticflickr.com/{}/{}_{}.jpg"
+            img_url_formated = img_url.format(farm, server, id, secret)
+            gallery_list.append(img_url_formated)
+
+        #print (gallery_list)
 
         return render_template(
             "gallery.html",
             posts=posts,
             mood_emoji=mood_emoji,
+            gallery_list=gallery_list,
             )
 
     @app.route("/music", methods=["GET", "POST"])

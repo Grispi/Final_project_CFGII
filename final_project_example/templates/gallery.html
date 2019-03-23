@@ -10,14 +10,26 @@
 <body>
 <nav>
     <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
-            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
+      <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
+      <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
     </ul>
 </nav>
+  {% block main %}
 
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1>Gallery</h1>
+        <hr>
+        <p>Your selection of pictures for {{ posts['mood'] }} and {{ posts['body'] }}!</p>
+        {% for item in gallery_list %}
+        <img src="{{item}}" alt="gallery">
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-
-        {{ posts['mood'] }}
+  {% endblock %}
 
 
 </body>
