@@ -3,6 +3,7 @@
 <head>
 <title>{% block title %} {% endblock %}Mood</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
 <style>
 
 </style>
@@ -16,21 +17,25 @@
 </nav>
   {% block main %}
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
+    <div id="gallery">
+      <div class= "container text-center">
         <h1>Gallery</h1>
         <hr>
         <p>Your selection of pictures for {{ posts['mood'] }} and {{ posts['body'] }}!</p>
-        {% for item in gallery_list %}
-        <img src="{{item}}" alt="gallery">
-        {% endfor %}
+
+
+      {% for item in gallery_list %}
+
+         <a href= "{{item}}">
+           <img id="image" src="{{item}}" alt="gallery">
+          </a>
+      {% endfor %}
       </div>
     </div>
-  </div>
 
   {% endblock %}
 
-
+  <script src="/static/scripts.js" charset="utf-8"></script>
+  <script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
 </body>
 </html>

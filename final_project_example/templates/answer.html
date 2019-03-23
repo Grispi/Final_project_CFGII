@@ -3,6 +3,7 @@
 <head>
 <title>{% block title %} {% endblock %}Mood</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
 <style>
     .button {
         font: bold 11px Arial;
@@ -22,8 +23,8 @@
 <nav>
     <h1>Emoji Mood</h1>
     <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
-            <li><a href= "{{ url_for('history') }}">history</a></li> 
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
+            <li><a href= "{{ url_for('history') }}">history</a></li>
 
     </ul>
 </nav>
@@ -37,7 +38,7 @@
 <a href= "{{ url_for('gallery') }}" class="button">Gallery</a>
 <a href= "{{ url_for('music') }}" class="button">Music</a>
 <a href= "{{ url_for('history') }}" class="button">History</a>
- 
+
 
 </section>
 </body>

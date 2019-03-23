@@ -3,6 +3,8 @@
 <head>
 <title>{% block title %} {% endblock %}Mood</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
+
 <style>
 table {
     width: 50%;
@@ -22,8 +24,8 @@ th {
 <body>
 <nav>
     <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
-            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>  
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
+            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
     </ul>
 </nav>
 {% for message in get_flashed_messages() %}
@@ -42,8 +44,8 @@ th {
     {% for calweek in calmonth %}
     <tr>
 
-       
-        {% for calday in calweek %}         
+
+        {% for calday in calweek %}
 
         {% if calday.month == month %}
               <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
