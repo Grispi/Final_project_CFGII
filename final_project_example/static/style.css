@@ -1,0 +1,27 @@
+#gallery {
+  background-color: firebrick;
+  background-image: linear-gradient(to right, firebrick, navajowhite);
+}
+
+h1{
+  font-weight: normal;
+  font-size: 50px;
+}
+
+p{
+    font-weight: normal;
+    font-size: 20px;
+}
+
+#gallery img{
+max-height:250px;
+max-width: 250px;
+height:100%;
+margin:10px;
+box-sizing: border-box;
+border: 3px solid #9e602f;
+}
+
+#gallery a{
+margin-left: auto;
+}
