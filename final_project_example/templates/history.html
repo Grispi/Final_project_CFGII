@@ -18,6 +18,18 @@ th, td {
 }
 th {
   text-align: left;
+
+}
+.button {
+        font: bold 11px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
 }
 </style>
 </head>
@@ -32,6 +44,10 @@ th {
     <div class="flash">{{ message }}</div>
 {% endfor %}
 <table class="post">
+  
+    <li><a href= "{{ url_for('history', month=previous_month, year=previous_year) }}" class="button">previous month</a><a href= "{{ url_for('history', month=next_month, year=next_year) }}" class="button">next month</a></li>
+    
+    {{ month_converter(month) }}  {{ year }}
     <tr>
         <th>Sunday</th>
         <th>Monday</th>
@@ -43,10 +59,7 @@ th {
     </tr>
     {% for calweek in calmonth %}
     <tr>
-
-
-        {% for calday in calweek %}
-
+        {% for calday in calweek %}         
         {% if calday.month == month %}
               <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
         {% else %}
@@ -77,8 +90,9 @@ th {
         </tr>
          {% endfor %}
     </table>
-    <a href= "{{ url_for('graph') }}">Your Chart</a>
+    <a href= "{{ url_for('graph') }}" class="button" > Your Chart</a>
     {% block content %}{% endblock %}
+
 </section>
 </body>
 </html>
