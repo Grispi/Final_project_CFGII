@@ -179,8 +179,8 @@ def create_app(test_config=None):
             ' ORDER BY id DESC '
         ).fetchone()
 
-        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&per_page=20&format=json&nojsoncallback=1'
-        r = requests.get(url.format(posts['body'], posts['mood'])).json()
+        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&sort=relevance&color_codes=a&safe_search=1&per_page=20&format=json&nojsoncallback=1'
+        r = requests.get(url.format(posts['mood'],posts['body'])).json()
 
         #json_object = r.text ---> Super handy to see if I am getting data
         #return json_object
