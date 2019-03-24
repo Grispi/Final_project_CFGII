@@ -112,8 +112,8 @@ def create_app(test_config=None):
             )
 
     happy_colour='#f52394'
-    sad_colour='#7c7c7c'
-    love_colour='#ff2000'
+    sad_colour='#567477'
+l   ove_colour='#ff2000'
 
     def mood_colour(mood):
         if 'Happy' == mood:
