@@ -29,7 +29,7 @@ def create_app(test_config=None):
     def new():
         if request.method == 'POST':
             mood = request.form["mood"]
-            body = request.form["body"]
+            body = request.form["body"].title()
             error = None
 
 
@@ -81,16 +81,16 @@ def create_app(test_config=None):
             mood_colour_cal=mood_colour_cal,
             )
 
-    happy_colour='#ffce0c'
-    sad_colour='#567477'
-    love_colour='#f4857f'
+    happy_colour='#f52394'
+    sad_colour='#7c7c7c'
+    love_colour='#ff2000'
 
     def mood_colour(mood):
-        if 'happy' == mood:
+        if 'Happy' == mood:
             return happy_colour
-        elif 'sad' == mood:
+        elif 'Sad' == mood:
             return sad_colour
-        elif 'love' == mood:
+        elif 'Love' == mood:
             return love_colour
         else:
             return''
@@ -102,11 +102,11 @@ def create_app(test_config=None):
         return ''
 
     def mood_emoji(mood):
-        if 'happy' == mood:
+        if 'Happy' == mood:
             return u'😃'
-        elif 'sad' == mood:
+        elif 'Sad' == mood:
             return u'😥'
-        elif 'love' == mood:
+        elif 'Love' == mood:
             return u'😍'
         else:
             return ''
@@ -116,15 +116,15 @@ def create_app(test_config=None):
         for post in posts:
             if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
                 mood = post['mood']
-                if 'happy' == mood:
+                if 'Happy' == mood:
                     return happy_colour
                     # return '#ef871a'
                     # return '#ffa342'
-                elif 'sad' == mood:
+                elif 'Sad' == mood:
                     return sad_colour
                     # return '#4d4d4f'
                     # return '#2b356b'
-                elif 'love' == mood:
+                elif 'Love' == mood:
                     # return '#e81717'
                     # return  '#ffb6b2'
                     return love_colour
@@ -179,11 +179,22 @@ def create_app(test_config=None):
             ' ORDER BY id DESC '
         ).fetchone()
 
-        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&sort=relevance&color_codes=a&safe_search=1&per_page=20&format=json&nojsoncallback=1'
-        r = requests.get(url.format(posts['mood'],posts['body'])).json()
+        mood = posts['mood']
+        if 'Happy' == mood:
+            flickr_code = 'color_codes=a'
 
-        #json_object = r.text ---> Super handy to see if I am getting data
-        #return json_object
+        elif 'Sad' == mood:
+            flickr_code = 'color_codes=d'
+
+        elif 'Love' == mood:
+            flickr_code = 'color_codes=0'
+
+        #Super handy to see if I am getting data -- remember to remove .json() from r to perform this test
+
+        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&sort=relevance&{}&safe_search=1&per_page=20&format=json&nojsoncallback=1'
+        r = requests.get(url.format(mood,posts['body'], flickr_code)).json()
+        # json_object = r.text
+        # return json_object
 
         gallery_list = list()
 
@@ -197,12 +208,14 @@ def create_app(test_config=None):
             gallery_list.append(img_url_formated)
 
         #print (gallery_list)
+        body_lower = (posts['body']).upper()
 
         return render_template(
             "gallery.html",
             posts=posts,
             mood_emoji=mood_emoji,
             gallery_list=gallery_list,
+            body_lower=body_lower
             )
 
     @app.route("/music", methods=["GET", "POST"])
