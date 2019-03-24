@@ -51,24 +51,48 @@ def create_app(test_config=None):
             return redirect(url_for('index'))
         return render_template("new.html")
 
+    @app.route("/index", methods=["GET", "POST"])
+    def index():
+
+        db = get_db()
+        posts = db.execute(
+            'SELECT mood, body'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
+
+        return render_template(
+            "answer.html",
+            posts=posts,
+            mood_emoji=mood_emoji,
+            )
 
 
-    @app.route("/history", methods=["GET", "POST"])
-    def history():
-
+    @app.route("/history/", defaults={'month':None, 'year':None},  methods=["GET", "POST"])
+    @app.route("/history/<month>/<year>", methods=["GET", "POST"])
+    def history(month, year):
+        if month is None:
+            month = datetime.date.today().month
+        else:
+            month=int(month)
+        if year is None:
+            year = datetime.date.today().year
+        else:
+            year=int(year)
+        
         db = get_db()
         posts = db.execute(
             'SELECT id, mood, body, created'
             ' FROM post'
             ' ORDER BY created DESC'
         ).fetchall()
-
-        # date_mood_time= date_mood.strftime("%d-%m-%Y")
+    
         cal = calendar.Calendar(6)
         today = datetime.date.today().day
-        month = datetime.date.today().month
-        year = datetime.date.today().year
         calmonth = cal.monthdatescalendar(year,month)
+        previous_month, previous_year= previous_date(month, year)
+        next_month, next_year= next_date(month, year)
+
         return render_template(
             "history.html",
             posts=posts,
@@ -76,14 +100,20 @@ def create_app(test_config=None):
             calmonth = calmonth,
             month = month,
             today = today,
+            year = year,
             find_mood_for_date = find_mood_for_date,
             mood_emoji = mood_emoji,
             mood_colour_cal=mood_colour_cal,
+            previous_month=previous_month,
+            previous_year=previous_year,
+            next_month=next_month,
+            next_year=next_year,
+            month_converter=month_converter,
             )
 
-    happy_colour='#ffce0c'
+    happy_colour='#f52394'
     sad_colour='#567477'
-    love_colour='#f4857f'
+    love_colour='#ff2000'
 
     def mood_colour(mood):
         if 'happy' == mood:
@@ -111,7 +141,6 @@ def create_app(test_config=None):
         else:
             return ''
 
-
     def mood_colour_cal(date, posts):
         for post in posts:
             if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
@@ -129,6 +158,28 @@ def create_app(test_config=None):
                     # return  '#ffb6b2'
                     return love_colour
         return ''
+
+    def previous_date(month , year1):
+        pre_month = 0
+        new_year = 0
+        if month > 1:
+            pre_month = month - 1
+            new_year = year1
+        else:
+            pre_month= 12
+            new_year = year1 - 1
+        return pre_month , new_year
+
+    def next_date(month , year):
+        if month < 12:
+            month += 1
+        else:
+            month = 1
+            year += 1
+        return month , year
+
+    def month_converter(month):
+        return calendar.month_abbr[month]
 
     @app.route("/graph", methods=["GET", "POST"])
     def graph():
@@ -153,22 +204,7 @@ def create_app(test_config=None):
             mood_labels = mood_labels,
             count_mood = count_mood,
             )
-    @app.route("/index", methods=["GET", "POST"])
-    def index():
-
-        db = get_db()
-        posts = db.execute(
-            'SELECT mood, body'
-            ' FROM post'
-            ' ORDER BY id DESC '
-        ).fetchone()
-
-        return render_template(
-            "answer.html",
-            posts=posts,
-            mood_emoji=mood_emoji,
-            )
-
+  
     @app.route("/gallery", methods=["GET", "POST"])
     def gallery():
 
@@ -220,6 +256,8 @@ def create_app(test_config=None):
             posts=posts,
             mood_emoji=mood_emoji,
             )
+
+        
 
     from . import db
     db.init_app(app)
