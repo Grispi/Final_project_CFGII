@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+<html>
 <title>{% block title %} {% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
-
+<body>
 <nav>
     <h1>Emoji Mood</h1>
     <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
-            <li><a href= "{{ url_for('history') }}">history</a></li>  
-            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>  
+            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
+            <li><a href= "{{ url_for('history') }}">history</a></li>
+            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
     </ul>
 </nav>
 <section class="content">
@@ -35,3 +36,5 @@
   {% endfor %}
     {% block content %}{% endblock %}
 </section>
+</body>
+</html>

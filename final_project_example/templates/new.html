@@ -1,29 +1,37 @@
 <!doctype html>
+<html>
 <title>{% block title %} {% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
-<html>
-  <head>
-    <title>How are you feeling?</title>
-  </head>
-  <body>
-    <ul>
-          <li><a href= "{{ url_for('history') }}">All your Moods</a></li>   
-          <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>  
-    </ul>
-    <div id="contact-form">
-        <form action="/" method="post" >
-            <label for="mood">How are you feeling?</label>
-            <select name="mood">
-                    <option value="Love">😍</option>
-                    <option value="Happy">😃</option>
-                    <option value="Sad">😥</option>
-            </select>
-            <br>
-            <label for="body">Keywords that best describe your mood: </label>
-            <textarea name="body" id="body"></textarea>
-            <input type="submit" value="Save" id="submit-button">
-        </form>
+<head>
+  <title>How are you feeling?</title>
+</head>
+<body>
+  <ul>
+        <li><a href= "{{ url_for('history') }}">All your Moods</a></li>
+        <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
+  </ul>
+    <div class="text-center">
+      <div id="buttons">
+        <h1>How are you feeling today?</h1>
+        <br>
+        <form action="/" method="post">
+        <label class="radio-inline">
+          <input type="radio" name="mood" value="Love"checked>😍
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="mood" value="Happy">😃
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="mood" value="Sad">😥
+        </label>
+        </div>
+        <br>
+        <label for="body">
+        <input type="text" size="35" name="body" placeholder='Keywords that best describe your mood'>
+        <button type="submit" class="btn btn-default">Save</button>
+        </label>
+      </form>
     </div>
   </body>
 </html>
