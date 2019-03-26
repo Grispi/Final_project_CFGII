@@ -201,16 +201,22 @@ def create_app(test_config=None):
         for post in posts:
            mood_labels.append(post['mood'])
            count_mood.append(post['count(*)'])
+        total = sum(count_mood)
 
         return render_template(
             "graph.html",
             posts=posts,
             mood_colour=mood_colour,
             mood_emoji = mood_emoji,
-            mood_colour_cal=mood_colour_cal,
             mood_labels = mood_labels,
             count_mood = count_mood,
+            total=total,
+            average=average,
             )
+
+    def average(number, total):
+        total_ave= number *100 / total
+        return total_ave
 
     @app.route("/gallery", methods=["GET", "POST"])
     def gallery():

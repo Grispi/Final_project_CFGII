@@ -11,14 +11,14 @@
 <table class="graph">
 	<tr>
 		{% for item in mood_labels %}
-			<th>{{ item }} </th>
+			<th style="background-color: {{ mood_colour(item) }}">{{ item }} </th>
 		{% endfor %}
 	</tr>
-	<tr>
-		{% for items in count_mood %}
-			<th>{{ items }} </th>	
-		{% endfor %}
-	</tr>
+  <tr>
+    {% for items in count_mood %}
+      <th>{{ average(items, total) }}% </th>
+    {% endfor %}
+  </tr>
 </table>
 </div>
 <script>
@@ -53,13 +53,14 @@
     			options: {
     				responsive: true,
     				legend: {
+              display:false,
     					position: 'top',
 						labels:{
 							fontSize: 18,
 							boxWidth: 20,
 						}
     				},
-				
+
     				title: {
     					display: true,
     					text: 'Mood Chart',
