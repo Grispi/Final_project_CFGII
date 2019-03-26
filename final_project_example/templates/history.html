@@ -1,79 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>{% block title %} {% endblock %}Mood</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
 
-<style>
-table {
-    width: 50%;
-}
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 5px;
-}
-th {
-  text-align: left;
-
-}
-.button {
-        font: bold 11px Arial;
-        text-decoration: none;
-        background-color: #EEEEEE;
-        color: #333333;
-        padding: 2px 6px 2px 6px;
-        border-top: 1px solid #CCCCCC;
-        border-right: 1px solid #333333;
-        border-bottom: 1px solid #333333;
-        border-left: 1px solid #CCCCCC;
-}
-</style>
-</head>
-<body>
-<nav>
-    <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
-            <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
-    </ul>
-</nav>
+{% extends "base.html" %}
+{% block body %}
 {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
 {% endfor %}
-<table class="post">
-  
-    <li><a href= "{{ url_for('history', month=previous_month, year=previous_year) }}" class="button">previous month</a><a href= "{{ url_for('history', month=next_month, year=next_year) }}" class="button">next month</a></li>
-    
-    {{ month_converter(month) }}  {{ year }}
-    <tr>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-    </tr>
-    {% for calweek in calmonth %}
-    <tr>
-        {% for calday in calweek %}         
-        {% if calday.month == month %}
-              <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
-        {% else %}
-            <td>&nbsp;</td>
-        {% endif %}
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
 
-
-<section class="content">
+<section class="content container">
     <header>
-        <h1>Your Mood History</h1>
+        <h2>Your Mood History</h2>
     </header>
 
     <table class="post">
@@ -91,8 +25,9 @@ th {
          {% endfor %}
     </table>
     <a href= "{{ url_for('graph') }}" class="button" > Your Chart</a>
+    <a href= "{{ url_for('mcalendar') }}" class="button" > Mood Calendar</a>
     {% block content %}{% endblock %}
 
 </section>
-</body>
-</html>
+
+{% endblock %}

@@ -1,16 +1,5 @@
-<!doctype html>
-<html>
-<title>{% block title %} {% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
-<head>
-  <title>How are you feeling?</title>
-</head>
-<body>
-  <ul>
-        <li><a href= "{{ url_for('history') }}">All your Moods</a></li>
-        <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
-  </ul>
+{% extends "base.html" %}
+{% block body %}
     <div class="text-center">
       <div id="buttons">
         <h1>How are you feeling today?</h1>
@@ -33,5 +22,4 @@
         </label>
       </form>
     </div>
-  </body>
-</html>
+{% endblock %}

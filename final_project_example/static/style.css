@@ -1,3 +1,14 @@
+body{
+  background-color: navajowhite;
+  /* background-color: #ffba00; */
+  background-image: linear-gradient(to bottom, navajowhite, firebrick);
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
 .btn h1{
   font-size: 80px;
 }
@@ -8,14 +19,7 @@
   margin-right: 35px;
 }
 
-body{
-  background-color: navajowhite;
-  background-image: linear-gradient(to bottom, navajowhite, firebrick);
-  height: 100%;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
+
 
 h1{
   font-weight: normal;
@@ -38,4 +42,40 @@ border: 3px solid #9e602f;
 
 #gallery a{
 margin-left: auto;
+}
+header{
+  text-align: center;
+}
+table {
+  width: 50%;
+  margin: 0 auto;
+}
+table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+th, td {
+padding: 5px;
+}
+th {
+text-align: left;
+
+}
+.button {
+      font: bold 11px Arial;
+      text-decoration: none;
+      background-color: #EEEEEE;
+      color: #333333;
+      padding: 2px 6px 2px 6px;
+      border-top: 1px solid #CCCCCC;
+      border-right: 1px solid #333333;
+      border-bottom: 1px solid #333333;
+      border-left: 1px solid #CCCCCC;
+}
+
+.graph {
+  width: 25%;
+  margin-top: 53px;
+  margin: 0 auto;
+  margin-top: 50px;
 }

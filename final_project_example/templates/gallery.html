@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>{% block title %} {% endblock %}Mood</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
-<style>
-
-</style>
-</head>
-<body>
-<nav>
-    <ul>
-      <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li>
-      <li><a href= "{{ url_for('graph') }}">Your Chart</a></li>
-    </ul>
+{% extends "base.html" %}
+{% block body %}
 </nav>
   {% block main %}
 
@@ -34,8 +20,5 @@
     </div>
 
   {% endblock %}
+{% endblock %}
 
-  <script src="/static/scripts.js" charset="utf-8"></script>
-  <script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
-</body>
-</html>

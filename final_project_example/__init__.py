@@ -2,7 +2,7 @@
 import os
 import calendar
 import datetime
-import emoji
+# import emoji
 import requests
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for
@@ -67,10 +67,23 @@ def create_app(test_config=None):
             mood_emoji=mood_emoji,
             )
 
+    @app.route("/history/",  methods=["GET", "POST"])
+    def history():
+        db = get_db()
+        posts = db.execute(
+            'SELECT id, mood, body, created'
+            ' FROM post'
+            ' ORDER BY created DESC'
+        ).fetchall()
+        return render_template(
+            "history.html",
+            posts=posts,
+            mood_colour=mood_colour,
+        )
 
-    @app.route("/history/", defaults={'month':None, 'year':None},  methods=["GET", "POST"])
-    @app.route("/history/<month>/<year>", methods=["GET", "POST"])
-    def history(month, year):
+    @app.route("/mcalendar/", defaults={'month':None, 'year':None},  methods=["GET", "POST"])
+    @app.route("/mcalendar/<month>/<year>", methods=["GET", "POST"])
+    def mcalendar(month, year):
         if month is None:
             month = datetime.date.today().month
         else:
@@ -94,7 +107,7 @@ def create_app(test_config=None):
         next_month, next_year= next_date(month, year)
 
         return render_template(
-            "history.html",
+            "mcalendar.html",
             posts=posts,
             mood_colour=mood_colour,
             calmonth = calmonth,
@@ -147,15 +160,9 @@ def create_app(test_config=None):
                 mood = post['mood']
                 if 'Happy' == mood:
                     return happy_colour
-                    # return '#ef871a'
-                    # return '#ffa342'
                 elif 'Sad' == mood:
                     return sad_colour
-                    # return '#4d4d4f'
-                    # return '#2b356b'
                 elif 'Love' == mood:
-                    # return '#e81717'
-                    # return  '#ffb6b2'
                     return love_colour
         return ''
 

@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block body %}
+{% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+{% endfor %}
+<header>
+<h2>Mood Calendar</h2>
+</header>
+<table class="post container" >
+   
+    <li>
+    <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="button">previous month</a><a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="button">next month</a>
+    {{ month_converter(month) }}  {{ year }}
+    </li>
+    
+   
+    <tr>
+        <th>Sunday</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+    </tr>
+    {% for calweek in calmonth %}
+    <tr>
+        {% for calday in calweek %}         
+        {% if calday.month == month %}
+              <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

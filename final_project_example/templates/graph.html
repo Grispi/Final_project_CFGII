@@ -1,77 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>{% block title %} {% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
-   <!-- import plugin script -->
-   <script src='static/Chart.min.js'></script>
-
-   <script src="https://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
-   <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
-</head>
-<body>
-<nav>
-    <h1>Emoji Mood</h1>
-    <ul>
-            <li><a href= "{{ url_for('new') }}">New Emoji Mood</a></li> 
-            <li><a href= "{{ url_for('history') }}">All your Moods</a></li>  
-    </ul>
-</nav>
-  <div style="width:75%;">
+{% extends "base.html" %}
+{% block body %}
+<div class="responsive">
+<div class="container" style="width:75%;">
         <canvas id="canvas"></canvas>
-    </div>
+</div>
+</div>
 
-<section class="content">
-    <header>
-        <h1>Data</h1>
 
-    </header>
-    {{ mood_labels }}
-    {{ count_mood }}
-
-    {% block content %}{% endblock %}
-</section>
-
+<div class="responsive" >
+<table class="graph">
+	<tr>
+		{% for item in mood_labels %}
+			<th>{{ item }} </th>
+		{% endfor %}
+	</tr>
+	<tr>
+		{% for items in count_mood %}
+			<th>{{ items }} </th>	
+		{% endfor %}
+	</tr>
+</table>
+</div>
 <script>
-    		var config = {
-    			type: 'doughnut',
-    			data: {
-    				datasets: [{
+    var config = {
+    		type: 'doughnut',
+    		data: {
+    			datasets: [{
     					data: [
-                {% for item in count_mood %}
-                "{{item}}"  ,
-                {% endfor %}
+                			{% for item in count_mood %}
+                				"{{item}}"  ,
+                			{% endfor %}
+    						],
 
-    					],
     					backgroundColor: [
-    						window.chartColors.red,
+    							'#f52394',
+								'#ff2000',
+								'#567477',
     						// window.chartColors.orange,
-    						window.chartColors.yellow,
+    						//window.chartColors.red,
     						// window.chartColors.green,
-    						window.chartColors.blue,
-    					],
+    						//window.chartColors.blue,
+    						],
     					label: 'Dataset 1'
-    				}],
-    				labels: [
+    					}],
+
+    			labels: [
                          {% for item in mood_labels %}
                             "{{item}}"  ,
                          {% endfor %}
+						]},
 
-    				]
-    			},
     			options: {
     				responsive: true,
     				legend: {
     					position: 'top',
+						labels:{
+							fontSize: 18,
+							boxWidth: 20,
+						}
     				},
+				
     				title: {
     					display: true,
-    					text: 'Mood Chart'
+    					text: 'Mood Chart',
+						fontSize: 30,
+						padding: 20,
     				},
     				animation: {
     					animateScale: true,
-    					animateRotate: true
+    					animateRotate: true,
     				}
     			}
     		};
@@ -83,7 +80,4 @@
 
 </script>
 
-
-
-</body>
-</html>
+{% endblock %}
