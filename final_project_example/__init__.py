@@ -4,6 +4,7 @@ import calendar
 import datetime
 # import emoji
 import requests
+import math
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for
 from final_project_example.db import get_db
@@ -215,8 +216,9 @@ def create_app(test_config=None):
             )
 
     def average(number, total):
-        total_ave= number *100 / total
-        return total_ave
+        total_ave= float(number) *100 / total
+        return int(round(total_ave))
+      
 
     @app.route("/gallery", methods=["GET", "POST"])
     def gallery():

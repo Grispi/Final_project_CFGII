@@ -1,14 +1,14 @@
 
 {% extends "base.html" %}
 {% block body %}
+
 {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
 {% endfor %}
 
 <section class="content container">
-    <header>
+ 
         <h2>Your Mood History</h2>
-    </header>
 
     <table class="post">
         <tr >
@@ -24,10 +24,9 @@
         </tr>
          {% endfor %}
     </table>
-    <a href= "{{ url_for('graph') }}" class="button" > Your Chart</a>
-    <a href= "{{ url_for('mcalendar') }}" class="button" > Mood Calendar</a>
-    {% block content %}{% endblock %}
-
+    <a href= "{{ url_for('graph') }}" class="btn btn-default" role="button" >Your Chart</a>
+    <a href= "{{ url_for('mcalendar') }}" class="btn btn-default" role="button">Calendar</a>
+   
 </section>
 
 {% endblock %}

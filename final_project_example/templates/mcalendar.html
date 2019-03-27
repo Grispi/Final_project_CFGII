@@ -7,35 +7,43 @@
 <header>
 <h2>Mood Calendar</h2>
 </header>
-<table class="post container" >
-   
-    <li>
-    <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="button">previous month</a><a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="button">next month</a>
-    {{ month_converter(month) }}  {{ year }}
-    </li>
-    
-   
-    <tr>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-    </tr>
-    {% for calweek in calmonth %}
-    <tr>
-        {% for calday in calweek %}         
-        {% if calday.month == month %}
-              <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
-        {% else %}
-            <td>&nbsp;</td>
-        {% endif %}
+    <table class="post container" >
+        <div class="row">
+            <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
+            previous month
+            </a>
+            <h4 class="col-sm-4">{{ month_converter(month) }}  {{ year }}</h4>
+            <a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="btn btn-default col-sm-2" role="button">
+            next month
+            </a>
+            
+        </div>
+        
+        <tr>
+            <th>Sunday</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+        </tr>
+
+        {% for calweek in calmonth %}
+        <tr>
+            {% for calday in calweek %}         
+            {% if calday.month == month %}
+                <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
         {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
+    </table>
+    <a href= "{{ url_for('graph') }}" class="btn btn-default" role="button" > Your Chart</a>
+    <a href= "{{ url_for('history') }}" class="btn btn-default" role="button" >History</a>
+   
 
 
 {% endblock %}

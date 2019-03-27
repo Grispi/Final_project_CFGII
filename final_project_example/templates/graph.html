@@ -20,7 +20,12 @@
     {% endfor %}
   </tr>
 </table>
+<div class="button_container">
+		<a href= "{{ url_for('mcalendar') }}" class="btn btn-default" role="button" > Calendar</a>
+    <a href= "{{ url_for('history') }}" class="btn btn-default" role="button" > History</a>
 </div>
+</div>
+    
 <script>
     var config = {
     		type: 'doughnut',
