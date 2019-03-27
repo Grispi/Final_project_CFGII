@@ -294,4 +294,4 @@ def create_app(test_config=None):
 
     return app
 
-create_app().run(debug=True, port=port)
+create_app().run(host='0.0.0.0', debug=True, port=port)
