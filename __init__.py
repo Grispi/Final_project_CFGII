@@ -4,9 +4,11 @@ import calendar
 import datetime
 import requests
 import math
-
+import sys
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import db
 from db import get_db
 # from werkzeug.exceptions import abort
 
@@ -288,7 +290,6 @@ def create_app(test_config=None):
             )
 
 
-    from . import db
     db.init_app(app)
 
     return app
