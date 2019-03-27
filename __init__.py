@@ -7,7 +7,7 @@ import math
 
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for
-from final_project_example.db import get_db
+from db import get_db
 # from werkzeug.exceptions import abort
 
 
