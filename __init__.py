@@ -129,17 +129,32 @@ def create_app(test_config=None):
             month_converter=month_converter,
             )
 
-    happy_colour='#f52394'
+    happy_colour='#eada2c'
+    love_colour='#f52394'
+    enthusiastic_colour='#efa123'
+    nerd_colour="#1093b7"
+    tired_colour="#39894f"
+    worried_colour="#965ec4"
+    furious_colour="#ba2112"
     sad_colour='#567477'
-    love_colour='#ff2000'
 
     def mood_colour(mood):
         if 'Happy' == mood:
             return happy_colour
-        elif 'Sad' == mood:
-            return sad_colour
         elif 'Love' == mood:
             return love_colour
+        elif 'Enthusiastic' == mood:
+            return enthusiastic_colour
+        elif 'Nerd' == mood:
+            return nerd_colour
+        elif 'Tired' == mood:
+            return tired_colour
+        elif 'Worried' == mood:
+            return worried_colour
+        elif 'Furious' == mood:
+            return furious_colour
+        elif 'Sad' == mood:
+            return sad_colour
         else:
             return''
 
@@ -152,10 +167,20 @@ def create_app(test_config=None):
     def mood_emoji(mood):
         if 'Happy' == mood:
             return u'😃'
-        elif 'Sad' == mood:
-            return u'😥'
         elif 'Love' == mood:
             return u'😍'
+        elif 'Enthusiastic' == mood:
+            return u'🤩'
+        elif 'Nerd' == mood:
+            return u'🤓'
+        elif 'Tired' == mood:
+            return u'😴'
+        elif 'Worried' == mood:
+            return u'😟'
+        elif 'Furious' == mood:
+            return u'😡'
+        elif 'Sad' == mood:
+            return u'😥'
         else:
             return ''
 
@@ -165,10 +190,20 @@ def create_app(test_config=None):
                 mood = post['mood']
                 if 'Happy' == mood:
                     return happy_colour
-                elif 'Sad' == mood:
-                    return sad_colour
                 elif 'Love' == mood:
                     return love_colour
+                elif 'Enthusiastic' == mood:
+                    return enthusiastic_colour
+                elif 'Nerd' == mood:
+                    return nerd_colour
+                elif 'Tired' == mood:
+                    return tired_colour
+                elif 'Worried' == mood:
+                    return worried_colour
+                elif 'Furious' == mood:
+                    return furious_colour
+                elif 'Sad' == mood:
+                    return sad_colour
         return ''
 
     def previous_date(month , year1):

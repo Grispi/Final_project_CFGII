@@ -16,7 +16,7 @@
 </head>
 <body>
 
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs list-unstyled">
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('new') }}">New Mood</a>
       </li>
@@ -29,7 +29,7 @@
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">All your Moods</a>
           <div class="dropdown-menu">
-            <ul>
+            <ul class="list-unstyled">
               <li>
                 <a class="dropdown-item" href= "{{ url_for('mcalendar') }}" > Mood Calendar</a>
               </li>

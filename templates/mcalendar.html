@@ -4,46 +4,52 @@
 {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
 {% endfor %}
-<header>
-<h2>Mood Calendar</h2>
-</header>
-    <table class="post container" >
-        <div class="row">
-            <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
-            previous month
-            </a>
-            <h4 class="col-sm-4">{{ month_converter(month) }}  {{ year }}</h4>
-            <a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="btn btn-default col-sm-2" role="button">
-            next month
-            </a>
-            
-        </div>
-        
-        <tr>
-            <th>Sunday</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-        </tr>
 
-        {% for calweek in calmonth %}
-        <tr>
-            {% for calday in calweek %}         
-            {% if calday.month == month %}
-                <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <a href= "{{ url_for('graph') }}" class="btn btn-default" role="button" > Your Chart</a>
-    <a href= "{{ url_for('history') }}" class="btn btn-default" role="button" >History</a>
+<div class='container'>
+  
+    <h2 class="text-center">Mood Calendar</h2>
+
+    </br>
+    <div>
+        <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
+                previous month
+        </a>
+        <h4 class="col-sm-8 center-text">{{ month_converter(month) }}  {{ year }}</h4>
+        <a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="btn btn-default col-sm-2" role="button">
+                next month
+        </a>
+    </div>
+
+    <table class="table calendar">
    
+            <tr class="table_row">
+                <th class="table_months">Sun</th>
+                <th class="table_months">Mon</th>
+                <th class="table_months">Tue</th>
+                <th class="table_months">Wed</th>
+                <th class="table_months">Thu</th>
+                <th class="table_months">Fri</th>
+                <th class="table_months">Sat</th>
+            </tr>
+
+            {% for calweek in calmonth %}
+            <tr>
+                {% for calday in calweek %}   
+                {% if calday.month == month %}
+                    <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
+                {% else %}
+                    <td>&nbsp;</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+    </table>
+    <div class="center-text">
+        <a href= "{{ url_for('graph') }}" class="btn btn-lg btn-default" role="button" > Statistics</a>
+        <a href= "{{ url_for('history') }}" class="btn btn-lg btn-default" role="button" >History</a>
+    </div>
+</div>
+
 
 
 {% endblock %}
