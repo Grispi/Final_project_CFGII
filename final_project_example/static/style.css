@@ -1,12 +1,54 @@
 body{
-  /* background-color: navajowhite;
-  background-color: #ffba00;
-  background-image: linear-gradient(to bottom, navajowhite, firebrick); */
-  height: 100%;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  animation: colorchange 5s; /* animation-name followed by duration in seconds*/
+     /* you could also use milliseconds (ms) or something like 2.5s */
+  -webkit-animation: colorchange 5s; /* Chrome and Safari */
+  animation-iteration-count: infinite;
+ margin: 0;
+ padding: 0;
+ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+ background-color: 	#D2691E;
+ height: 100%;
+ margin: 0;
+
 }
+
+@keyframes colorchange
+{
+  0%   {background: red;}
+  5%   {background: pink;}
+  15%  {background: beige;}
+  20%  {background: brown;}
+  25%  {background: yellow;}
+  30%  {background: silver;}
+  40%  {background: grey;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  80%  {background: orange;}
+  100% {background: red;}
+}
+
+@-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
+{
+  0%   {background: red;}
+  5%   {background: pink;}
+  15%  {background: beige;}
+  20%  {background: brown;}
+  25%  {background: yellow;}
+  30%  {background: silver;}
+  40%  {background: grey;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  80%  {background: orange;}
+  100% {background: red;}
+}
+
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+
 
 
 .btn h1{
@@ -24,6 +66,10 @@ body{
 h1{
   font-weight: normal;
   font-size: 50px;
+  font-size: 3em;
+  margin-top: 40px;
+  text-align: center;
+  letter-spacing: -2px;
 }
 
 p{
@@ -43,10 +89,15 @@ border: 3px solid #9e602f;
 #gallery a{
 margin-left: auto;
 }
-header{
-  margin-top: 10%;
-  text-align: center;
+
+header {
+  height: 35px;
+  width: 100%;
+  opacity: .9;
+  margin-bottom: 10px;
+
 }
+
 table {
   width: 50%;
   margin: 0 auto;

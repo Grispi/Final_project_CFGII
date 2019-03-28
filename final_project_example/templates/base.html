@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="/static/style.css">
  <!-- import plugin script -->
 <script src='static/Chart.min.js'></script>
 
@@ -15,7 +15,7 @@
   <title>How are you feeling?</title>
 </head>
 <body>
-
+  <div class="container">
   <ul class="nav nav-tabs">
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('new') }}">New Mood</a>
@@ -43,10 +43,11 @@
           </div>
       </li>
   </ul>
+</div>
+
 {% block body %}{% endblock %}
-    <!-- <script src="/static/scripts.js" charset="utf-8"></script> ?? -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-  
+
   </body>
 </html>
