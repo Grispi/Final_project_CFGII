@@ -2,15 +2,19 @@
 import os
 import calendar
 import datetime
-# import emoji
 import requests
 import math
+import sys
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for
-from final_project_example.db import get_db
-from werkzeug.exceptions import abort
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import db
+from db import get_db
+# from werkzeug.exceptions import abort
+
 
 API_KEY = "a33ea2b039e32abade45a6e1b1b87670"
+port = int(os.environ.get("PORT", 5000))
 
 def create_app(test_config=None):
     #create and configure the app
@@ -286,8 +290,8 @@ def create_app(test_config=None):
             )
 
 
-
-    from . import db
     db.init_app(app)
 
     return app
+
+create_app().run(host='0.0.0.0', debug=True, port=port)
