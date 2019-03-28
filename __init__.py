@@ -18,7 +18,7 @@ port = int(os.environ.get("PORT", 5000))
 
 def create_app(test_config=None):
     #create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_path=os.path.dirname(os.path.abspath(__file__)) + '/instance', instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'final_project.sqlite'),
@@ -294,4 +294,5 @@ def create_app(test_config=None):
 
     return app
 
-create_app().run(host='0.0.0.0', debug=True, port=port)
+if __name__ == "__main__":
+    create_app().run(host='0.0.0.0', debug=True, port=port)
