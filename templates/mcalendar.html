@@ -5,10 +5,8 @@
     <div class="flash">{{ message }}</div>
 {% endfor %}
 
-<div class='container'>
-  
+<div class='container parallax' id="calendar">
     <h2 class="text-center">Mood Calendar</h2>
-
     </br>
     <div>
         <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
@@ -45,10 +43,136 @@
             {% endfor %}
     </table>
     <div class="center-text">
-        <a href= "{{ url_for('graph') }}" class="btn btn-lg btn-default" role="button" > Statistics</a>
-        <a href= "{{ url_for('history') }}" class="btn btn-lg btn-default" role="button" >History</a>
+        <a href= "#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
+        <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
     </div>
 </div>
+
+<div class="container parallax" >
+    <div class="responsive">
+        <div class="graph_container" id="graph" >
+            <h2 class="text-center">Mood Statistics</h2>
+            <canvas id="canvas" width="900" height="300"></canvas>
+            <div class='table-responsive' >
+                <table class="table" id="graph_table">
+                    <tr class="table_row">
+                        {% for item in mood_labels %}
+                            <th class="table_labels" style="background-color: {{ mood_colour(item) }}">{{ item }} </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for items in count_mood %}
+                        <th class="text-center">{{ average(items, total) }}% </th>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <div class="center-text graph_links">
+                <a href= "#calendar" class="btn btn-lg btn-default" role="button" > Calendar</a>
+                <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
+            </div>  
+        </div>
+</div>
+
+
+
+<div class="container parallax" id='history'>
+        <div class="responsive">
+            <section>
+                <h2 class="text-center">Mood History</h2>
+                <table class="table post">
+                    <tr >
+                        <th class="table_months">Mood</th>
+                        <th class="table_months">keyword</th>
+                        <th class="table_months">Date</th>
+                    </tr>
+                    {% for post in posts %}
+                    <tr style="background-color: {{ mood_colour(post['mood']) }} ">
+                        <td class="table_history">{{ post['mood'] }}</td>
+                        <td class="table_history">{{ post['body'] }} </td>
+                        <td class="table_history"> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="center-text a-links">
+                    <a href="#calendar" class="btn btn-lg btn-default" role="button" >Calendar</a>
+                    <a href="#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
+                </div> 
+            </section>
+        </div>
+</div>
+
+</div>
+<script>
+    var config = {
+    		type: 'doughnut',
+    		data: {
+    			datasets: [{
+    					data: [
+                			{% for item in count_mood  %}
+                				"{{item}}"  ,
+                			{% endfor %}
+    						],
+
+    					backgroundColor: [
+                                    'rgb(255, 148, 0, 0.7)',//enthusiastic
+									//'#efa123', 
+                                    'rgb(186, 0, 0, 0.6)',//furious
+									//"#ba2112", 
+                                    'rgb(239, 207, 0, 0.7)',//happy
+									//'#eada2c', 
+                                    'rgb(239, 81, 94, 0.4)', //love
+    							    //'#f52394', 
+                                    'rgb(4, 128, 163, 0.4)',//nerd
+									//'#1093b7', 
+                                    'rgb(62, 70, 71, 0.4)', //sad
+									//'#567477', 
+                                    'rgb(57, 137, 79, 0.3)',//tired
+   								    //"#39894f" , 
+                                    'rgb(86, 20, 104, 0.3)',//worried
+   								    //"#965ec4", 
+                                    
+    						],
+    					label: 'Dataset 1'
+    					}],
+
+    			labels: [
+                         {% for item in mood_labels %}
+                            "{{item}}"  ,
+                         {% endfor %}
+						]},
+
+    			options: {
+    				responsive: true,
+    				legend: {
+              display:false,
+    					position: 'top',
+						labels:{
+							fontSize: 18,
+							boxWidth: 20,
+						}
+    				},
+
+    				title: {
+    					display: false,
+    					text: 'Mood Chart',
+						fontSize: 30,
+						padding: 20,
+    				},
+    				animation: {
+    					animateScale: true,
+    					animateRotate: true,
+    				}
+    			}
+    		};
+
+    		window.onload = function() {
+    			var ctx = document.getElementById('canvas').getContext('2d');
+    			window.myDoughnut = new Chart(ctx, config);
+    		};
+
+</script>
+
 
 
 

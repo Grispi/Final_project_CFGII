@@ -6,9 +6,16 @@ body{
   margin: 0;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  padding-top: 70px;
+}
+.nav{
+  background-color: white;
+  font-size: 17px;
 }
 
-
+.nav a{
+  color: black;
+}
 .btn h1{
   font-size: 80px;
 }
@@ -18,8 +25,6 @@ body{
   margin-left: 35px;
   margin-right: 35px;
 }
-
-
 
 h1{
   font-weight: normal;
@@ -56,6 +61,7 @@ table, th, td {
   font-size: 15px;
   white-space: pre;
 }
+
 th, td {
   padding: 8px;
 }
@@ -63,7 +69,7 @@ th {
   text-align: left;
 
 }
-.button {
+/* .button {
       font: bold 20px Arial;
       text-decoration: none;
       background-color: rgb(255, 255, 255);
@@ -73,17 +79,32 @@ th {
       border-right: 1px solid #333333;
       border-bottom: 1px solid #333333;
       border-left: 1px solid #CCCCCC;
-}
+} */
 .button_container {
   margin-top: 40px;
-
+}
+#graph{
+  padding-top: 70px;
 }
 
+#history{
+  padding-top: 70px;
+}
+
+.graph_container{
+  padding: 5px;
+  height: 100vh;
+}
 .graph {
-  width: 30%;
-  margin-top: 53px;
+  width: 20%;
+  /* margin-top: 53px; */
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.graph_links{
+  margin-bottom: 20px;
 }
 
 .center-text {
@@ -95,8 +116,50 @@ th {
   background-color:  #999999;
   border: 1px solid black !important;
   text-align: center;
+  font-size: 17px;
+}
+.table_labels {
+  border: 1px solid black !important;
+  text-align: center;
+  padding: 2px;
+  width: 12.5% !important;
+  font-size: 17px;
+} 
+
+.parallax {
+ /* Set a specific height */
+  height: 100vh; 
+  perspective: 1px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#canvas{
+ margin: 40px 0;
+}
+#graph_table{
+  margin: 30px 0;
+}
+h2{
+  margin-top: 0;
 }
 
-.center{
-  display: fix; 
+.table.post{
+  width:70%;
+  margin: 0 auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.table_history{
+  font-size: 17px;
+}
+
+.a-links{
+  margin-bottom: 40px;
 }

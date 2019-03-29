@@ -1,1 +1,4 @@
 .DS_Store
+instance/
+/instance
+/final_project.sqlite

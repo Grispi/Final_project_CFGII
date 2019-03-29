@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<head>
 <title>{% block title %} {% endblock %} MoodsAPP</title>
 
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
@@ -7,16 +8,18 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
  <!-- import plugin script -->
-<script src='static/Chart.min.js'></script>
+<script src='/static/Chart.min.js'></script>
 
 <script src="https://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
 <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
-<head>
+
   <title>How are you feeling?</title>
+
 </head>
+
 <body>
 
-  <ul class="nav nav-tabs list-unstyled">
+  <ul class="nav nav-tabs list-unstyled navbar-fixed-top">
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('new') }}">New Mood</a>
       </li>
@@ -26,21 +29,8 @@
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('music') }}">Mood Music</a>
       </li>
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">All your Moods</a>
-          <div class="dropdown-menu">
-            <ul class="list-unstyled">
-              <li>
-                <a class="dropdown-item" href= "{{ url_for('mcalendar') }}" > Mood Calendar</a>
-              </li>
-               <li>
-                <a class="dropdown-item" href= "{{ url_for('history') }}">History</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href= "{{ url_for('graph') }}">Your Chart</a>
-              </li>
-            </ul>
-          </div>
+      <li class="nav-item">
+          <a class="nav-link"  href= "{{ url_for('mcalendar') }}">All your Moods</a>
       </li>
   </ul>
 {% block body %}{% endblock %}
