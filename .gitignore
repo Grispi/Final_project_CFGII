@@ -2,3 +2,6 @@
 instance/
 /instance
 /final_project.sqlite
+.vscode/
+.env
+credentials.txt

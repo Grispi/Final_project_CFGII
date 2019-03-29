@@ -12,9 +12,13 @@ import db
 from db import get_db
 # from werkzeug.exceptions import abort
 
+# Credentials to be included in heroki
+with open("credentials.txt", "r") as file:
+    API_KEY = file.readline().split()[2]
 
-API_KEY = "a33ea2b039e32abade45a6e1b1b87670"
+
 port = int(os.environ.get("PORT", 5000))
+
 
 def create_app(test_config=None):
     #create and configure the app
@@ -143,11 +147,11 @@ def create_app(test_config=None):
     tired_colour='rgb(57, 137, 79, 0.3)'
     #  worried_colour='#965ec4'
     worried_colour='rgb(86, 20, 104, 0.3)'
-    # furious_colour="#ba2112"
+    # furious_colour="#ba2112" 
     furious_colour='rgb(186, 0, 0, 0.6)'
     # sad_colour='#567477'
     sad_colour='rgb(62, 70, 71, 0.4)'
-    
+
 
     def mood_colour(mood):
         if 'Happy' == mood:
@@ -295,7 +299,7 @@ def create_app(test_config=None):
     def average(number, total):
         total_ave= float(number) *100 / total
         return int(round(total_ave))
-      
+
 
     @app.route("/gallery", methods=["GET", "POST"])
     def gallery():
@@ -310,23 +314,35 @@ def create_app(test_config=None):
         mood = posts['mood']
         if 'Happy' == mood:
             flickr_code = 'color_codes=a'
-
         elif 'Sad' == mood:
             flickr_code = 'color_codes=d'
-
         elif 'Love' == mood:
             flickr_code = 'color_codes=0'
+        elif 'Enthusiastic' == mood:
+            flickr_code = 'color_codes=3' ####
+        elif 'Nerd' == mood:
+            flickr_code = 'color_codes=7' ####
+        elif 'Tired' == mood:
+            flickr_code = 'color_codes=6' ####
+        elif 'Worried' == mood:
+            flickr_code = 'color_codes=9' ####
+        elif 'Furious' == mood:
+            flickr_code = 'color_codes=1' ####
 
-        #Super handy to see if I am getting data -- remember to remove .json() from r to perform this test
+        with open("credentials.txt", "r") as file:
+            API_KEY = file.readline().split()[2]
 
-        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + API_KEY + '&text={}+{}&sort=relevance&{}&safe_search=1&per_page=20&format=json&nojsoncallback=1'
-        r = requests.get(url.format(mood,posts['body'], flickr_code)).json()
+
+        #Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
+
+        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key={}&text={}+{}&sort=relevance&{}&safe_search=1&per_page=20&format=json&nojsoncallback=1'
+        req = requests.get(url.format(API_KEY, mood, posts['body'], flickr_code)).json()
         # json_object = r.text
         # return json_object
 
         gallery_list = list()
 
-        for item in r['photos']['photo']:
+        for item in req['photos']['photo']:
             id = item["id"]
             farm = item["farm"]
             server = item["server"]
