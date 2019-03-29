@@ -135,10 +135,10 @@ th {
   overflow-y: auto;
 
   /* Create the parallax scrolling effect */
-  background-attachment: fixed;
+  /* background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
 }
 #canvas{
  margin: 40px 0;
@@ -154,8 +154,9 @@ h2{
   width:70%;
   margin: 0 auto;
   margin-top: 40px;
-  margin-bottom: 40px;
+  margin-bottom: 40px;  
 }
+
 .table_history{
   font-size: 17px;
 }

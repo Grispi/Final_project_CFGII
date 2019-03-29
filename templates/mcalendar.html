@@ -5,7 +5,7 @@
     <div class="flash">{{ message }}</div>
 {% endfor %}
 
-<div class='container parallax' id="calendar">
+<div class='container' id="calendar">
     <h2 class="text-center">Mood Calendar</h2>
     </br>
     <div>
@@ -42,13 +42,13 @@
             </tr>
             {% endfor %}
     </table>
-    <div class="center-text">
-        <a href= "#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
-        <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
-    </div>
+        <div class="center-text">
+            <a href= "#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
+            <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
+        </div>
 </div>
-
-<div class="container parallax" >
+<hr>
+<div class="container" >
     <div class="responsive">
         <div class="graph_container" id="graph" >
             <h2 class="text-center">Mood Statistics</h2>
@@ -72,11 +72,12 @@
                 <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
             </div>  
         </div>
+    </div>
+
 </div>
+<hr>
 
-
-
-<div class="container parallax" id='history'>
+<div class="container" id='history'>
         <div class="responsive">
             <section>
                 <h2 class="text-center">Mood History</h2>
@@ -86,13 +87,16 @@
                         <th class="table_months">keyword</th>
                         <th class="table_months">Date</th>
                     </tr>
+                   <tbody class="table_body">
                     {% for post in posts %}
-                    <tr style="background-color: {{ mood_colour(post['mood']) }} ">
+                    <tr  style="background-color: {{ mood_colour(post['mood']) }} ">
                         <td class="table_history">{{ post['mood'] }}</td>
                         <td class="table_history">{{ post['body'] }} </td>
                         <td class="table_history"> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
                     </tr>
+                    
                     {% endfor %}
+                    </tbody>
                 </table>
                 <div class="center-text a-links">
                     <a href="#calendar" class="btn btn-lg btn-default" role="button" >Calendar</a>
@@ -102,7 +106,7 @@
         </div>
 </div>
 
-</div>
+
 <script>
     var config = {
     		type: 'doughnut',
