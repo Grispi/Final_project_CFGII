@@ -16,5 +16,3 @@ After initialize the database file, you can run the python file:\
 
 http://flask.pocoo.org/docs/1.0/tutorial/factory/
 
-Emoji module:
-$ pip install emoji --upgrade
