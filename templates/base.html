@@ -6,9 +6,9 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
  <!-- import plugin script -->
-<script src='/static/Chart.min.js'></script>
+<script src='/static/jquery/Chart.min.js'></script>
 
 <script src="https://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
 <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body id="shelf">
 
   <ul class="nav nav-tabs list-unstyled navbar-fixed-top">
       <li class="nav-item">
@@ -32,11 +32,38 @@
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('mcalendar') }}">All your Moods</a>
       </li>
+  
+    <li class="navbar-text pull-right"  id="color_options">
+    
+        <select class="navbar-brand navbar-right" id="themes" name="ChangeBG">
+          <option value="white" selected="selected">Default</option>
+          <option value="red">Heart</option>
+          <option value="#9a9a9a">Earthly</option>
+          <option value="#faafaf">Sunflowers</option>
+          <option value="#aa00cc">Mountin</option>
+        </select>
+      </li>
   </ul>
+ 
+ 
 {% block body %}{% endblock %}
     <!-- <script src="/static/scripts.js" charset="utf-8"></script> ?? -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-  
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      var theme = $.cookie("backgroundColor");
+      if (theme) {
+        document.getElementById("shelf").style.backgroundColor = theme;
+        $("#themes").val(theme);
+      }
+      $("#themes").change(function() {
+          theme = $(this).val();
+          $.cookie("backgroundColor", theme, {path:'/'});
+          document.getElementById("shelf").style.backgroundColor = theme;
+      });
+    });
+  </script>
   </body>
 </html>
