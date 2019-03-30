@@ -12,13 +12,13 @@ import db
 from db import get_db
 # from werkzeug.exceptions import abort
 
-# Credentials to be included in heroki
-with open("credentials.txt", "r") as file:
-    API_KEY = file.readline().split()[2]
-
+# Credentials to be included in heroku
+# with open("credentials.txt", "r") as file:
+#     API_KEY = file.readline().split()[2]
 
 port = int(os.environ.get("PORT", 5000))
 
+API_KEY = os.environ.get("API_KEY", None)
 
 def create_app(test_config=None):
     #create and configure the app
