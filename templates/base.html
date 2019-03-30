@@ -1,22 +1,25 @@
 <!doctype html>
 <html lang="en">
+<head>
 <title>{% block title %} {% endblock %} MoodsAPP</title>
 
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
  <!-- import plugin script -->
-<script src='static/Chart.min.js'></script>
+<script src='/static/jquery/Chart.min.js'></script>
 
 <script src="https://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
 <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
-<head>
+
   <title>How are you feeling?</title>
+
 </head>
-<body>
-  <div class="container">
-  <ul class="nav nav-tabs">
+
+<body id="shelf" class="white">
+
+  <ul class="nav nav-tabs list-unstyled navbar-fixed-top">
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('new') }}">New Mood</a>
       </li>
@@ -26,28 +29,41 @@
       <li class="nav-item">
           <a class="nav-link"  href= "{{ url_for('music') }}">Mood Music</a>
       </li>
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">All your Moods</a>
-          <div class="dropdown-menu">
-            <ul>
-              <li>
-                <a class="dropdown-item" href= "{{ url_for('mcalendar') }}" > Mood Calendar</a>
-              </li>
-               <li>
-                <a class="dropdown-item" href= "{{ url_for('history') }}">History</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href= "{{ url_for('graph') }}">Your Chart</a>
-              </li>
-            </ul>
-          </div>
+      <li class="nav-item">
+          <a class="nav-link"  href= "{{ url_for('mcalendar') }}">All your Moods</a>
+      </li>
+  
+    <li class="navbar-text pull-right"  id="color_options">
+    
+        <select class="navbar-brand navbar-right" id="themes" name="ChangeBG">
+          <option value="background-white" selected="selected">White</option>
+          <option value="background-colors">Colors</option>
+          <option value="background-gradient">Gradient</option>
+          <option value="background-yellow">Yellow</option>
+          <option value="background-orange">Orange</option>
+        </select>
       </li>
   </ul>
-</div>
-
+ 
+ 
 {% block body %}{% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      var theme = $.cookie("backgroundColor");
+      if (theme) {
+        $("#shelf").removeClass().addClass(theme);
+        $("#themes").val(theme);
+      }
+      $("#themes").change(function() {
+          theme = $(this).val();
+          $.cookie("backgroundColor", theme, {path:'/'});
+          $("#shelf").removeClass().addClass(theme);
 
+      });
+    });
+  </script>
   </body>
 </html>

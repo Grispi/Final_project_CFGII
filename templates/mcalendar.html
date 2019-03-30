@@ -4,46 +4,180 @@
 {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
 {% endfor %}
-<header>
-<h2>Mood Calendar</h2>
-</header>
-    <table class="post container" >
-        <div class="row">
-            <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
-            previous month
-            </a>
-            <h4 class="col-sm-4">{{ month_converter(month) }}  {{ year }}</h4>
-            <a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="btn btn-default col-sm-2" role="button">
-            next month
-            </a>
-            
-        </div>
-        
-        <tr>
-            <th>Sunday</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-        </tr>
 
-        {% for calweek in calmonth %}
-        <tr>
-            {% for calday in calweek %}         
-            {% if calday.month == month %}
-                <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }}  {{ mood_emoji(find_mood_for_date(calday, posts)) }}</td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <a href= "{{ url_for('graph') }}" class="btn btn-default" role="button" > Your Chart</a>
-    <a href= "{{ url_for('history') }}" class="btn btn-default" role="button" >History</a>
+<div class='container' id="calendar">
+    <h2 class="text-center">Mood Calendar</h2>
+    </br>
+    <div>
+        <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
+                previous month
+        </a>
+        <h4 class="col-sm-8 center-text">{{ month_converter(month) }}  {{ year }}</h4>
+        <a href= "{{ url_for('mcalendar', month=next_month, year=next_year) }}" class="btn btn-default col-sm-2" role="button">
+                next month
+        </a>
+    </div>
+
+    <table class="table calendar">
    
+            <tr class="table_row">
+                <th class="table_months">Sun</th>
+                <th class="table_months">Mon</th>
+                <th class="table_months">Tue</th>
+                <th class="table_months">Wed</th>
+                <th class="table_months">Thu</th>
+                <th class="table_months">Fri</th>
+                <th class="table_months">Sat</th>
+            </tr>
+
+            {% for calweek in calmonth %}
+            <tr>
+                {% for calday in calweek %}   
+                {% if calday.month == month %}
+                    <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
+                {% else %}
+                    <td>&nbsp;</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+    </table>
+        <div class="center-text">
+            <a href= "#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
+            <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
+        </div>
+</div>
+<hr>
+<div class="container" >
+    <div class="responsive">
+        <div class="graph_container" id="graph" >
+            <h2 class="text-center">Mood Statistics</h2>
+            <canvas id="canvas" width="900" height="300"></canvas>
+            <div class='table-responsive' >
+                <table class="table" id="graph_table">
+                    <tr class="table_row">
+                        {% for item in mood_labels %}
+                            <th class="table_labels" style="background-color: {{ mood_colour(item) }}">{{ item }} </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for items in count_mood %}
+                        <th class="text-center">{{ average(items, total) }}% </th>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <div class="center-text graph_links">
+                <a href= "#calendar" class="btn btn-lg btn-default" role="button" > Calendar</a>
+                <a href= "#history" class="btn btn-lg btn-default" role="button" >History</a>
+            </div>  
+        </div>
+    </div>
+
+</div>
+<hr>
+
+<div class="container" id='history'>
+        <div class="responsive">
+            <section>
+                <h2 class="text-center">Mood History</h2>
+                <table class="table post">
+                    <tr >
+                        <th class="table_months">Mood</th>
+                        <th class="table_months">keyword</th>
+                        <th class="table_months">Date</th>
+                    </tr>
+                   <tbody class="table_body">
+                    {% for post in posts %}
+                    <tr  style="background-color: {{ mood_colour(post['mood']) }} ">
+                        <td class="table_history">{{ post['mood'] }}</td>
+                        <td class="table_history">{{ post['body'] }} </td>
+                        <td class="table_history"> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
+                    </tr>
+                    
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="center-text a-links">
+                    <a href="#calendar" class="btn btn-lg btn-default" role="button" >Calendar</a>
+                    <a href="#graph" class="btn btn-lg btn-default" role="button" >Statistics</a>
+                </div> 
+            </section>
+        </div>
+</div>
+
+
+<script>
+    var config = {
+    		type: 'doughnut',
+    		data: {
+    			datasets: [{
+    					data: [
+                			{% for item in count_mood  %}
+                				"{{item}}"  ,
+                			{% endfor %}
+    						],
+
+    					backgroundColor: [
+                                    'rgb(255, 148, 0, 0.7)',//enthusiastic
+									//'#efa123', 
+                                    'rgb(186, 0, 0, 0.6)',//furious
+									//"#ba2112", 
+                                    'rgb(239, 207, 0, 0.7)',//happy
+									//'#eada2c', 
+                                    'rgb(239, 81, 94, 0.4)', //love
+    							    //'#f52394', 
+                                    'rgb(4, 128, 163, 0.4)',//nerd
+									//'#1093b7', 
+                                    'rgb(62, 70, 71, 0.4)', //sad
+									//'#567477', 
+                                    'rgb(57, 137, 79, 0.3)',//tired
+   								    //"#39894f" , 
+                                    'rgb(86, 20, 104, 0.3)',//worried
+   								    //"#965ec4", 
+                                    
+    						],
+    					label: 'Dataset 1'
+    					}],
+
+    			labels: [
+                         {% for item in mood_labels %}
+                            "{{item}}"  ,
+                         {% endfor %}
+						]},
+
+    			options: {
+    				responsive: true,
+    				legend: {
+              display:false,
+    					position: 'top',
+						labels:{
+							fontSize: 18,
+							boxWidth: 20,
+						}
+    				},
+
+    				title: {
+    					display: false,
+    					text: 'Mood Chart',
+						fontSize: 30,
+						padding: 20,
+    				},
+    				animation: {
+    					animateScale: true,
+    					animateRotate: true,
+    				}
+    			}
+    		};
+
+    		window.onload = function() {
+    			var ctx = document.getElementById('canvas').getContext('2d');
+    			window.myDoughnut = new Chart(ctx, config);
+    		};
+
+</script>
+
+
 
 
 {% endblock %}

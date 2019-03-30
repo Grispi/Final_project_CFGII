@@ -18,7 +18,7 @@ port = int(os.environ.get("PORT", 5000))
 
 def create_app(test_config=None):
     #create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_path=os.path.dirname(os.path.abspath(__file__)) + '/instance', instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'final_project.sqlite'),
@@ -72,20 +72,6 @@ def create_app(test_config=None):
             mood_emoji=mood_emoji,
             )
 
-    @app.route("/history/",  methods=["GET", "POST"])
-    def history():
-        db = get_db()
-        posts = db.execute(
-            'SELECT id, mood, body, created'
-            ' FROM post'
-            ' ORDER BY created DESC'
-        ).fetchall()
-        return render_template(
-            "history.html",
-            posts=posts,
-            mood_colour=mood_colour,
-        )
-
     @app.route("/mcalendar/", defaults={'month':None, 'year':None},  methods=["GET", "POST"])
     @app.route("/mcalendar/<month>/<year>", methods=["GET", "POST"])
     def mcalendar(month, year):
@@ -111,6 +97,18 @@ def create_app(test_config=None):
         previous_month, previous_year= previous_date(month, year)
         next_month, next_year= next_date(month, year)
 
+        posts2 = db.execute(
+            'SELECT mood, count(*)'
+            ' FROM post'
+            ' GROUP BY mood'
+        ).fetchall()
+        mood_labels = []
+        count_mood = []
+        for post in posts2:
+           mood_labels.append(post['mood'])
+           count_mood.append(post['count(*)'])
+        total = sum(count_mood)
+
         return render_template(
             "mcalendar.html",
             posts=posts,
@@ -127,19 +125,47 @@ def create_app(test_config=None):
             next_month=next_month,
             next_year=next_year,
             month_converter=month_converter,
+            mood_labels=mood_labels,
+            count_mood=count_mood,
+            average=average,
+            total=total,
             )
 
-    happy_colour='#f52394'
-    sad_colour='#567477'
-    love_colour='#ff2000'
+    # happy_colour='#eada2c'
+    happy_colour='rgb(239, 207, 0, 0.7)'
+    # love_colour='#f52394'
+    love_colour='rgb(239, 81, 94, 0.4)'
+    # enthusiastic_colour='#efa123'
+    enthusiastic_colour='rgb(255, 148, 0, 0.7)'
+    # nerd_colour="#1093b7"
+    nerd_colour='rgb(4, 128, 163, 0.4)'
+    # tired_colour="#39894f"
+    tired_colour='rgb(57, 137, 79, 0.3)'
+    #  worried_colour='#965ec4'
+    worried_colour='rgb(86, 20, 104, 0.3)'
+    # furious_colour="#ba2112"
+    furious_colour='rgb(186, 0, 0, 0.6)'
+    # sad_colour='#567477'
+    sad_colour='rgb(62, 70, 71, 0.4)'
+    
 
     def mood_colour(mood):
         if 'Happy' == mood:
             return happy_colour
-        elif 'Sad' == mood:
-            return sad_colour
         elif 'Love' == mood:
             return love_colour
+        elif 'Enthusiastic' == mood:
+            return enthusiastic_colour
+        elif 'Nerd' == mood:
+            return nerd_colour
+        elif 'Tired' == mood:
+            return tired_colour
+        elif 'Worried' == mood:
+            return worried_colour
+        elif 'Furious' == mood:
+            return furious_colour
+        elif 'Sad' == mood:
+            return sad_colour
         else:
             return''
 
@@ -152,10 +178,20 @@ def create_app(test_config=None):
     def mood_emoji(mood):
         if 'Happy' == mood:
             return u'😃'
-        elif 'Sad' == mood:
-            return u'😥'
         elif 'Love' == mood:
             return u'😍'
+        elif 'Enthusiastic' == mood:
+            return u'🤩'
+        elif 'Nerd' == mood:
+            return u'🤓'
+        elif 'Tired' == mood:
+            return u'😴'
+        elif 'Worried' == mood:
+            return u'😟'
+        elif 'Furious' == mood:
+            return u'😡'
+        elif 'Sad' == mood:
+            return u'😥'
         else:
             return ''
 
@@ -165,10 +201,20 @@ def create_app(test_config=None):
                 mood = post['mood']
                 if 'Happy' == mood:
                     return happy_colour
-                elif 'Sad' == mood:
-                    return sad_colour
                 elif 'Love' == mood:
                     return love_colour
+                elif 'Enthusiastic' == mood:
+                    return enthusiastic_colour
+                elif 'Nerd' == mood:
+                    return nerd_colour
+                elif 'Tired' == mood:
+                    return tired_colour
+                elif 'Worried' == mood:
+                    return worried_colour
+                elif 'Furious' == mood:
+                    return furious_colour
+                elif 'Sad' == mood:
+                    return sad_colour
         return ''
 
     def previous_date(month , year1):
@@ -193,31 +239,58 @@ def create_app(test_config=None):
     def month_converter(month):
         return calendar.month_abbr[month]
 
-    @app.route("/graph", methods=["GET", "POST"])
-    def graph():
-        db = get_db()
-        posts = db.execute(
-            'SELECT mood, count(*)'
-            ' FROM post'
-            ' GROUP BY mood'
-        ).fetchall()
-        mood_labels = []
-        count_mood = []
-        for post in posts:
-           mood_labels.append(post['mood'])
-           count_mood.append(post['count(*)'])
-        total = sum(count_mood)
+    # @app.route("/mcalendar", methods=["GET", "POST"])
+    # def graph():
+    #     db = get_db()
+    #     posts2 = db.execute(
+    #         'SELECT mood, count(*)'
+    #         ' FROM post'
+    #         ' GROUP BY mood'
+    #     ).fetchall()
+    #     mood_labels = []
+    #     count_mood = []
+    #     for post in posts2:
+    #        mood_labels.append(post['mood'])
+    #        count_mood.append(post['count(*)'])
+    #     total = sum(count_mood)
 
-        return render_template(
-            "graph.html",
-            posts=posts,
-            mood_colour=mood_colour,
-            mood_emoji = mood_emoji,
-            mood_labels = mood_labels,
-            count_mood = count_mood,
-            total=total,
-            average=average,
-            )
+    #     return render_template(
+    #         "mcalendar.html",
+    #         posts2=posts2,
+    #         mood_colour=mood_colour,
+    #         mood_emoji = mood_emoji,
+    #         mood_labels = mood_labels,
+    #         count_mood = count_mood,
+    #         total=total,
+    #         average=average,
+    #         )
+
+
+    # @app.route("/graph", methods=["GET", "POST"])
+    # def graph():
+    #     db = get_db()
+    #     posts = db.execute(
+    #         'SELECT mood, count(*)'
+    #         ' FROM post'
+    #         ' GROUP BY mood'
+    #     ).fetchall()
+    #     mood_labels = []
+    #     count_mood = []
+    #     for post in posts:
+    #        mood_labels.append(post['mood'])
+    #        count_mood.append(post['count(*)'])
+    #     total = sum(count_mood)
+
+    #     return render_template(
+    #         "graph.html",
+    #         posts=posts,
+    #         mood_colour=mood_colour,
+    #         mood_emoji = mood_emoji,
+    #         mood_labels = mood_labels,
+    #         count_mood = count_mood,
+    #         total=total,
+    #         average=average,
+    #         )
 
     def average(number, total):
         total_ave= float(number) *100 / total
@@ -294,4 +367,5 @@ def create_app(test_config=None):
 
     return app
 
-create_app().run(host='0.0.0.0', debug=True, port=port)
+if __name__ == "__main__":
+    create_app().run(host='0.0.0.0', debug=True, port=port)

@@ -6,37 +6,40 @@
         <h1>How are you feeling today?</h1>
         <br>
         <form action="/" method="post">
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Love"checked>😍
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Happy">😃
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Sad">😥
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Angry">😡
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Tired">😴
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Nerd">🤓
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Doubtful">🤔
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="mood" value="Enthusiastic">🤩
-        </label>
-        </div>
-        <br>
-        <label for="body">
-        <input type="text" size="35" name="body" placeholder='Keywords that best describe your mood'>
-        <button type="submit" class="btn btn-default">Save</button>
-        </label>
-      </form>
+          <div class="emojis">
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Love"checked>😍
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Happy">😃
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Enthusiastic">🤩
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Nerd">🤓
+          </label>
+          <br>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Tired">😴
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Worried">😟
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Furious">😡
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mood" value="Sad">😥
+          </label>
+          </div>
+          <br>
+          <label for="body">
+          <input type="text" size="35" name="body" placeholder='Keywords that best describe your mood'>
+          <button type="submit" class="btn btn-default">Save</button>
+          </label>
+        </form>
+      </div>
     </div>
   </header>
 {% endblock %}

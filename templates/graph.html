@@ -23,6 +23,10 @@
 <div class="button_container">
 		<a href= "{{ url_for('mcalendar') }}" class="btn btn-default" role="button" > Calendar</a>
     <a href= "{{ url_for('history') }}" class="btn btn-default" role="button" > History</a>
+		  <div class="center-text">
+        <a href= "{{ url_for('graph') }}" class="btn btn-lg btn-default" role="button" > Statistics</a>
+        <a href= "{{ url_for('history') }}" class="btn btn-lg btn-default" role="button" >History</a>
+    </div>
 </div>
 </div>
     
@@ -38,9 +42,16 @@
     						],
 
     					backgroundColor: [
-    							'#f52394',
-								'#ff2000',
-								'#567477',
+									'#efa123', //enthusiastic
+									"#ba2112", //furious
+									'#eada2c', //happy
+    							'#f52394', //love
+									'#1093b7', //nerd
+									'#567477', //sad
+   								"#39894f" , //tired
+   								"#965ec4", //worried
+   								
+								
     						// window.chartColors.orange,
     						//window.chartColors.red,
     						// window.chartColors.green,
@@ -58,7 +69,7 @@
     			options: {
     				responsive: true,
     				legend: {
-              display:false,
+              display:true,
     					position: 'top',
 						labels:{
 							fontSize: 18,
