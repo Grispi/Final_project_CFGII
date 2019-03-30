@@ -243,59 +243,7 @@ def create_app(test_config=None):
     def month_converter(month):
         return calendar.month_abbr[month]
 
-    # @app.route("/mcalendar", methods=["GET", "POST"])
-    # def graph():
-    #     db = get_db()
-    #     posts2 = db.execute(
-    #         'SELECT mood, count(*)'
-    #         ' FROM post'
-    #         ' GROUP BY mood'
-    #     ).fetchall()
-    #     mood_labels = []
-    #     count_mood = []
-    #     for post in posts2:
-    #        mood_labels.append(post['mood'])
-    #        count_mood.append(post['count(*)'])
-    #     total = sum(count_mood)
-
-    #     return render_template(
-    #         "mcalendar.html",
-    #         posts2=posts2,
-    #         mood_colour=mood_colour,
-    #         mood_emoji = mood_emoji,
-    #         mood_labels = mood_labels,
-    #         count_mood = count_mood,
-    #         total=total,
-    #         average=average,
-    #         )
-
-
-    # @app.route("/graph", methods=["GET", "POST"])
-    # def graph():
-    #     db = get_db()
-    #     posts = db.execute(
-    #         'SELECT mood, count(*)'
-    #         ' FROM post'
-    #         ' GROUP BY mood'
-    #     ).fetchall()
-    #     mood_labels = []
-    #     count_mood = []
-    #     for post in posts:
-    #        mood_labels.append(post['mood'])
-    #        count_mood.append(post['count(*)'])
-    #     total = sum(count_mood)
-
-    #     return render_template(
-    #         "graph.html",
-    #         posts=posts,
-    #         mood_colour=mood_colour,
-    #         mood_emoji = mood_emoji,
-    #         mood_labels = mood_labels,
-    #         count_mood = count_mood,
-    #         total=total,
-    #         average=average,
-    #         )
-
+    
     def average(number, total):
         total_ave= float(number) *100 / total
         return int(round(total_ave))
@@ -329,8 +277,8 @@ def create_app(test_config=None):
         elif 'Furious' == mood:
             flickr_code = 'color_codes=1' ####
 
-        with open("credentials.txt", "r") as file:
-            API_KEY = file.readline().split()[2]
+        # with open("credentials.txt", "r") as file:
+        #     API_KEY = file.readline().split()[2]
 
 
         #Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
