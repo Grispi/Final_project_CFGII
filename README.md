@@ -16,9 +16,9 @@ After initialize the database file, you can run the python file:\
 
 http://flask.pocoo.org/docs/1.0/tutorial/factory/
 
-#install requirements.txt
+# Install requirements.txt:
 ```pip install -r requirements.txt```
 
-#Add file .env in the project folder with this data:
+# Add file .env in the project folder with this data:
 ```API_KEY = your api key from fliker```
 
