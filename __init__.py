@@ -3,10 +3,24 @@ import os
 import calendar
 import datetime
 import requests
+import urllib
+import json
 import math
 import sys
 
-from flask import Flask, render_template, request, flash, g, redirect, url_for
+from flask import Flask, render_template, request, flash, g, redirect, url_for, session
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import db
+from db import get_db
+import requests
+import urllib
+from requests.auth import HTTPBasicAuth
+import time
+import json
+
+from pprint import pprint
+
+from flask import Flask, render_template, request, flash, g, redirect, url_for, session
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import db
 from db import get_db
@@ -147,7 +161,7 @@ def create_app(test_config=None):
     tired_colour='rgb(57, 137, 79, 0.3)'
     #  worried_colour='#965ec4'
     worried_colour='rgb(86, 20, 104, 0.3)'
-    # furious_colour="#ba2112" 
+    # furious_colour="#ba2112"
     furious_colour='rgb(186, 0, 0, 0.6)'
     # sad_colour='#567477'
     sad_colour='rgb(62, 70, 71, 0.4)'
@@ -243,13 +257,13 @@ def create_app(test_config=None):
     def month_converter(month):
         return calendar.month_abbr[month]
 
-    
+
     def average(number, total):
         total_ave= float(number) *100 / total
         return int(round(total_ave))
 
 
-    @app.route("/gallery", methods=["GET", "POST"])
+    @app.route("/gallery", methods=["GET"])
     def gallery():
 
         db = get_db()
@@ -310,24 +324,204 @@ def create_app(test_config=None):
             body_lower=body_lower
             )
 
-    @app.route("/music", methods=["GET", "POST"])
+    # Spotify App data
+    CLIENT_ID = 'f61666ad56b74fbbb4d0b6862df29f95'
+    CLIENT_SECRET = 'ba5283bbb94a401ba624d82b78b287f3'
+
+
+    # Requeest a token without asking user to log in
+    def call_api_token():
+        endpoint = "https://accounts.spotify.com/api/token"
+        make_request = requests.post(endpoint,
+                                     data={"grant_type": "client_credentials",
+                                           "client_id": CLIENT_ID,
+                                           "client_secret": CLIENT_SECRET})
+        return make_request
+
+
+    # Get a token without asking user to log in
+    def final():
+        spo_response = call_api_token()
+        # Check response from Spotify API
+        # Something went wrong. Ask user to try again
+        if spo_response.status_code != 200:
+            return redirect(url_for('music'))
+        return spo_response.json()
+
+
+    # Class that stores token not related to user
+    class TokenStorage:
+        def __init__(self):
+            self.token = None
+            self.expire_in = None
+            self.start = None
+
+        # Check if token has exired
+        def expire(self, time_now):
+            if (time_now - self.start) > self.expire_in:
+                return True
+            return False
+
+        # Get token first time or if expired
+        def get_token(self, time_now):
+            if self.token is None or self.expire(time_now):
+                access_data = final()
+                self.token = access_data['access_token']
+                self.expire_in = access_data['expires_in']
+                self.start = time.time()
+            # print self.token
+            return self.token
+
+
+    # Token to access to Spotify data that do not need access to user related data
+    # It is stored as class TokenStorage object
+    # To get token - TOKEN.get_token(time_now)
+    TOKEN = TokenStorage()
+
+    # Create params_query_string
+    def params_query_string(payload):
+        # Python2 version
+        url_arg = urllib.urlencode(payload)
+
+    # Function that replace special characters in val string using the %xx escape
+    def quote_params_val(val):
+        # Python2 version
+        value = urllib.quote(val)
+        return value
+
+
+    def searh_request(token, payload):
+        '''
+        Search request to Spotify API.
+        Can be used both types of tokens.
+        Payload specifies what you would like to search (in particular: album,
+        playlist, playlist, or track)
+        '''
+        # Endpoint to search
+        # endpoint = 'https://api.spotify.com/v1/search'
+        endpoint = 'https://api.spotify.com/v1/recommendations'
+
+        # Use the access token to access Spotify API
+        authorization_header = {"Authorization": "Bearer {}".format(token)}
+        # Prepare URL for search request
+        url_arg = "&".join(["{}={}".format(key, quote_params_val(val))
+                           for key, val in payload.items()])
+        # url_arg = params_query_string(payload)
+        # auth_url = endpoint + "/?" + url_arg
+        auth_url = endpoint+"?"+ url_arg
+        # Get request to Spotify API to search
+        search_response = requests.get(auth_url, headers=authorization_header)
+        # Return the response in json format
+        return search_response.json()
+
+
+    def search_tracks(token, query):
+        '''
+        Function that searches the playlist
+        Input: token and playlist name
+        Returns: array of arist objects in json format
+        '''
+        # Specify that we want to search the playlist
+        #change query for mood
+        if query =="happy":
+
+            payload = {
+                    "seed_genres": 'pop',
+                    "min_danceability":'0.8',
+                    "min_energy":'0.8',
+                    }
+        elif query =="sad":
+            payload = {
+                    "seed_genres": 'blues',
+                    "min_danceability":'0.1',
+                    "min_energy":'0.1',
+                    }
+        elif query =="love":
+            payload = {
+                    "seed_genres": 'dance',
+                    "min_danceability":'0.5',
+                    "min_energy":'0.8',
+                    }
+
+        # Return array of arist objects in json format
+        return searh_request(token, payload)
+
+
+    @app.route("/music")
     def music():
-
-        db = get_db()
-        posts = db.execute(
-            'SELECT mood'
-            ' FROM post'
-            ' ORDER BY id DESC '
-        ).fetchone()
-
-        return render_template(
-            "music.html",
-            posts=posts,
-            mood_emoji=mood_emoji,
-            )
+        '''
+        Ask user:
+        1) playlist to search, see playlist's top tracks, listen 30 sec preview,
+        add playlist's top tracks to user's Spotify account new playlist
+        2) Search city for upcoming gigs.
+        '''
+        if "tracks_uri" in session:
+            session.pop('tracks_uri', None)
+        if "playlist_name" in session:
+            session.pop("playlist_name", None)
+        return render_template("music.html")
 
 
-    db.init_app(app)
+    @app.route("/login")
+    def requestAuth():
+        """
+        Application requests authorization from Spotify.
+        Step 1 in Guide
+        """
+        endpoint = "https://accounts.spotify.com/authorize"
+        payload = {
+                  "client_id": CLIENT_ID,
+                  "response_type": "code",
+                  "redirect_uri": REDIRECT_URI,
+                  # "state": "sdfdskjfhkdshfkj",
+                  "scope": "playlist-modify-public user-read-private",
+                  # "show_dialog": True
+                }
+
+        # Create query string from params
+        # url_arg = "&".join(["{}={}".format(key, quote_params_val(val)) for
+        #                    key, val in params.items()])
+        url_arg = params_query_string(payload)
+
+        # Request URL
+        auth_url = endpoint + "/?" + url_arg
+        #print "AUTH_URL", auth_url
+        # User is redirected to Spotify where user is asked to authorize access to
+        # his/her account within the scopes
+        return redirect(auth_url)
+
+
+
+    @app.route("/search_tracks", methods=["POST"])
+    def tracks_search():
+        """
+        This decorator searches the track by name
+        Returns:
+        1) Template with found playlists that match user input
+        2) Template that asks to repeat playlist search in case of
+        previous unsuccessful attempt.
+        """
+        # Check if user is logged in
+        #if "access_data" not in session:
+        #     return redirect(url_for('index'))
+        # User is logged in
+        # # Get access token from user's request
+        # token = session['access_data']['access_token']
+
+        # Not related to user token is stored as class TokenStorage object
+        token = TOKEN.get_token(time.time())
+
+        # Get data that user post to app on index page
+        form_data = request.form
+        track = form_data["track"]
+
+        # Get data in json format from search_playlist request
+        found_tracks = search_tracks(token, track)
+
+        return render_template("req_to_show_tracks.html",found_tracks=found_tracks,)
+
+
+        db.init_app(app)
 
     return app
 
