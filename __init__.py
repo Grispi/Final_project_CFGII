@@ -423,26 +423,56 @@ def create_app(test_config=None):
         '''
         # Specify that we want to search the playlist
         #change query for mood
-        if query =="happy":
+        if query == "happy":
 
             payload = {
-                    "seed_genres": 'pop',
+                    "seed_genres": 'happy',
                     "min_danceability":'0.8',
                     "min_energy":'0.8',
                     }
-        elif query =="sad":
+        elif query == "sad":
             payload = {
-                    "seed_genres": 'blues',
+                    "seed_genres": 'rainy-day',
                     "min_danceability":'0.1',
                     "min_energy":'0.1',
                     }
-        elif query =="love":
+        elif query == "love":
             payload = {
                     "seed_genres": 'dance',
                     "min_danceability":'0.5',
                     "min_energy":'0.8',
                     }
-
+        elif query == "enthusiactic":
+            payload = {
+                    "seed_genres": 'pop',
+                    "min_danceability":'0.8',
+                    "min_energy":'0.8',
+                    }
+        elif query == "furious":
+            payload = {
+                    "seed_genres": 'goth',
+                    "min_danceability":'0.4',
+                    "min_energy":'0.4',
+                    }
+        elif query == "nerd" :
+            payload = {
+                    "seed_genres": 'disco',
+                    "min_danceability":'0.5',
+                    "min_energy":'0.4',
+                    }
+        elif query == "tired":
+            payload = {
+                    "seed_genres": 'ambient',
+                    "min_danceability":'0.1',
+                    "min_energy":'0.1',
+                    }
+        elif query == "worried":
+            payload = {
+                    "seed_genres": 'grunge',
+                    "min_danceability":'0.4',
+                    "min_energy":'0.5',
+                    }
+                    
         # Return array of arist objects in json format
         return searh_request(token, payload)
 
