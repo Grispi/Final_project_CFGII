@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="sontainer text-center">
+          <p>Enter your mood to find tracks to listen to</p>
+            <div id="contact-form">
+                <form method="post" action="/search_tracks">
+                  <input class="type-text" type="text" id="track" name="track" required="required" placeholder="Enter mood">
+                  <input class="btn btn-secondary btn-lg submit-button" type="submit" value="Find" id="submit-button">
+                </form>
+              </div>
+
+{% endblock %}

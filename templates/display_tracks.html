@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container text-center">
+      <p>Music</p><br>
+         <div id="contact-form">
+          <ul>
+            {% for track in found_tracks['tracks']%}
+              <li>
+                <a href="{{track['external_urls']['spotify']}}" target="_blank">
+                  {{track['name']}} by {{ track['artists'][0]['name']}}
+                <audio controls>
+                <source src="track_url.ogg" type="audio/ogg">
+                <source src="{{ track["preview_url"]}}" type="audio/mpeg">
+                </audio>
+                </a></li>
+            {% endfor %}
+          </ul>
+         </div>
+    </div>
+{% endblock %}

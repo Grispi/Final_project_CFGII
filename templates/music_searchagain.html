@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+
+        <div class="container2">
+          <p>Spotify doesn't know the mood named {{ track }} <br>
+             Please, search again</p><br>
+          <div id="contact-form">
+            <form method="post" action="/search_tracks">
+              <input class="type-text" type="text" id="playlist" name="track" required="required" placeholder="Enter a mood"><br>
+              <input class="btn btn-secondary btn-lg" type="submit" value="Find" id="submit-button">
+            </form>
+
+          </div>
+        </div>
+
+{% endblock %}
