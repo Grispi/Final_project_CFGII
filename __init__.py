@@ -9,13 +9,14 @@ import math
 import sys
 import time
 import urllib
+import tweepy
 
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for, session
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from requests.auth import HTTPBasicAuth
 
-import db 
+import db
 from db import get_db
 
 from pprint import pprint
@@ -280,7 +281,7 @@ def create_app(test_config=None):
             flickr_code = 'color_codes=d'
         elif 'Love' == mood:
             flickr_code = 'color_codes=0'
-        elif 'Enthusiastic' == mood: 
+        elif 'Enthusiastic' == mood:
             flickr_code = 'color_codes=3' ####
         elif 'Nerd' == mood:
             flickr_code = 'color_codes=7' ####
@@ -428,7 +429,7 @@ def create_app(test_config=None):
         # change query for mood
         mood = posts['mood']
 
-        
+
         if query == "Happy":
             payload = {
                     "seed_genres": 'happy',
@@ -477,7 +478,7 @@ def create_app(test_config=None):
                     "min_danceability":'0.4',
                     "min_energy":'0.5',
                     }
-                    
+
         # Return array of arist objects in json format
         return searh_request(token, payload)
 
@@ -504,7 +505,7 @@ def create_app(test_config=None):
         # if "playlist_name" in session:
         #     session.pop("playlist_name", None)
 
-       
+
         # Not related to user token is stored as class TokenStorage object
         token = TOKEN.get_token(time.time())
 
@@ -514,7 +515,7 @@ def create_app(test_config=None):
         # Get data in json format from search_playlist request
         found_tracks = search_tracks(token, track)
 
-        return render_template("music.html", 
+        return render_template("music.html",
             posts=posts,
             mood=mood,
             mood_emoji = mood_emoji,
@@ -548,7 +549,6 @@ def create_app(test_config=None):
         # User is redirected to Spotify where user is asked to authorize access to
         # his/her account within the scopes
         return redirect(auth_url)
-
 
         db.init_app(app)
 
