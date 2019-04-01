@@ -7,23 +7,19 @@ import urllib
 import json
 import math
 import sys
+import time
+import urllib
+
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for, session
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import db
-from db import get_db
-import requests
-import urllib
 from requests.auth import HTTPBasicAuth
-import time
-import json
+
+import db 
+from db import get_db
 
 from pprint import pprint
 
-from flask import Flask, render_template, request, flash, g, redirect, url_for, session
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import db
-from db import get_db
 # from werkzeug.exceptions import abort
 
 # Credentials to be included in heroku
@@ -33,6 +29,10 @@ from db import get_db
 port = int(os.environ.get("PORT", 5000))
 
 API_KEY = os.environ.get("API_KEY", None)
+
+# Spotify App data
+CLIENT_ID = os.environ.get("CLIENT_ID", None)
+CLIENT_SECRET = os.environ.get("CLIENT_SECRET", None)
 
 def create_app(test_config=None):
     #create and configure the app
@@ -280,7 +280,7 @@ def create_app(test_config=None):
             flickr_code = 'color_codes=d'
         elif 'Love' == mood:
             flickr_code = 'color_codes=0'
-        elif 'Enthusiastic' == mood:
+        elif 'Enthusiastic' == mood: 
             flickr_code = 'color_codes=3' ####
         elif 'Nerd' == mood:
             flickr_code = 'color_codes=7' ####
@@ -323,11 +323,6 @@ def create_app(test_config=None):
             gallery_list=gallery_list,
             body_lower=body_lower
             )
-
-    # Spotify App data
-    CLIENT_ID = 'f61666ad56b74fbbb4d0b6862df29f95'
-    CLIENT_SECRET = 'ba5283bbb94a401ba624d82b78b287f3'
-
 
     # Requeest a token without asking user to log in
     def call_api_token():
@@ -422,51 +417,61 @@ def create_app(test_config=None):
         Returns: array of arist objects in json format
         '''
         # Specify that we want to search the playlist
-        #change query for mood
-        if query == "happy":
 
+        db = get_db()
+        posts = db.execute(
+            'SELECT body, mood'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
+
+        # change query for mood
+        mood = posts['mood']
+
+        
+        if query == "Happy":
             payload = {
                     "seed_genres": 'happy',
                     "min_danceability":'0.8',
                     "min_energy":'0.8',
                     }
-        elif query == "sad":
+        elif query == "Sad":
             payload = {
                     "seed_genres": 'rainy-day',
                     "min_danceability":'0.1',
                     "min_energy":'0.1',
                     }
-        elif query == "love":
+        elif query == "Love":
             payload = {
                     "seed_genres": 'dance',
                     "min_danceability":'0.5',
                     "min_energy":'0.8',
                     }
-        elif query == "enthusiactic":
+        elif query == "Enthusiastic":
             payload = {
                     "seed_genres": 'pop',
                     "min_danceability":'0.8',
                     "min_energy":'0.8',
                     }
-        elif query == "furious":
+        elif query == "Furious":
             payload = {
                     "seed_genres": 'goth',
                     "min_danceability":'0.4',
                     "min_energy":'0.4',
                     }
-        elif query == "nerd" :
+        elif query == "Nerd" :
             payload = {
                     "seed_genres": 'disco',
                     "min_danceability":'0.5',
                     "min_energy":'0.4',
                     }
-        elif query == "tired":
+        elif query == "Tired":
             payload = {
                     "seed_genres": 'ambient',
                     "min_danceability":'0.1',
                     "min_energy":'0.1',
                     }
-        elif query == "worried":
+        elif query == "Worried":
             payload = {
                     "seed_genres": 'grunge',
                     "min_danceability":'0.4',
@@ -485,11 +490,35 @@ def create_app(test_config=None):
         add playlist's top tracks to user's Spotify account new playlist
         2) Search city for upcoming gigs.
         '''
-        if "tracks_uri" in session:
-            session.pop('tracks_uri', None)
-        if "playlist_name" in session:
-            session.pop("playlist_name", None)
-        return render_template("music.html")
+        db = get_db()
+        posts = db.execute(
+            'SELECT body, mood'
+            ' FROM post'
+            ' ORDER BY id DESC '
+        ).fetchone()
+
+        mood = posts['mood']
+
+        # if "tracks_uri" in session:
+        #     session.pop('tracks_uri', None)
+        # if "playlist_name" in session:
+        #     session.pop("playlist_name", None)
+
+       
+        # Not related to user token is stored as class TokenStorage object
+        token = TOKEN.get_token(time.time())
+
+        # Get data that user post to app on index page
+        track = mood
+
+        # Get data in json format from search_playlist request
+        found_tracks = search_tracks(token, track)
+
+        return render_template("music.html", 
+            posts=posts,
+            mood=mood,
+            mood_emoji = mood_emoji,
+            found_tracks=found_tracks,)
 
 
     @app.route("/login")
@@ -519,36 +548,6 @@ def create_app(test_config=None):
         # User is redirected to Spotify where user is asked to authorize access to
         # his/her account within the scopes
         return redirect(auth_url)
-
-
-
-    @app.route("/search_tracks", methods=["POST"])
-    def tracks_search():
-        """
-        This decorator searches the track by name
-        Returns:
-        1) Template with found playlists that match user input
-        2) Template that asks to repeat playlist search in case of
-        previous unsuccessful attempt.
-        """
-        # Check if user is logged in
-        #if "access_data" not in session:
-        #     return redirect(url_for('index'))
-        # User is logged in
-        # # Get access token from user's request
-        # token = session['access_data']['access_token']
-
-        # Not related to user token is stored as class TokenStorage object
-        token = TOKEN.get_token(time.time())
-
-        # Get data that user post to app on index page
-        form_data = request.form
-        track = form_data["track"]
-
-        # Get data in json format from search_playlist request
-        found_tracks = search_tracks(token, track)
-
-        return render_template("req_to_show_tracks.html",found_tracks=found_tracks,)
 
 
         db.init_app(app)
