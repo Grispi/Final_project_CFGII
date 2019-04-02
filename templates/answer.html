@@ -20,6 +20,14 @@
         <a href= "{{ url_for('mcalendar') }}" class="btn btn-default" role="button">
             Calendar
         </a>
+        <br>
+        <br>
+        <br>
+           <a href="https://twitter.com/intent/tweet?text=Today%20I&#39m%20{{ mood_emoji(posts['mood']) }}%20{{ posts['body']}}" class="twitter-share-button" data-size="large">
+          Tweet
+          </a>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+       
     </div>
     </header>
 
