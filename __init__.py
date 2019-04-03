@@ -17,17 +17,10 @@ from requests.auth import HTTPBasicAuth
 import db
 from db import get_db
 
-# from pprint import pprint
-
-# from werkzeug.exceptions import abort
-
-# Credentials to be included in heroku
-# with open("credentials.txt", "r") as file:
-#     API_KEY = file.readline().split()[2]
-
+# Port configuration for Heroku
 port = int(os.environ.get("PORT", 5000))
 
-
+# Flickr Key
 API_KEY = os.environ.get("API_KEY", None)
 
 # Spotify App data
@@ -35,7 +28,7 @@ CLIENT_ID = os.environ.get("CLIENT_ID", None)
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET", None)
 
 def create_app(test_config=None):
-    #create and configure the app
+    #create and configure the app and database
     app = Flask(__name__, instance_path=os.path.dirname(os.path.abspath(__file__)) + '/instance', instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -50,18 +43,19 @@ def create_app(test_config=None):
 
     @app.route("/", methods=["GET", "POST"])
     def new():
+        # get the information from the form
         if request.method == 'POST':
             mood = request.form["mood"]
             body = request.form["body"].title()
             error = None
-
 
             if not mood:
                 error = 'Emoji is required.'
 
             if error is not None:
                 flash(error)
-
+    
+            # include data from the user in the database
             else:
                 db = get_db()
                 db.execute(
@@ -70,13 +64,15 @@ def create_app(test_config=None):
                     (mood, body)
                 )
                 db.commit()
-                # flash( "{} because {}" .format(mood , body))
+            # flash( "{} because {}" .format(mood , body))
             return redirect(url_for('index'))
+
         return render_template("new.html")
 
+   
     @app.route("/index", methods=["GET", "POST"])
     def index():
-
+    # Show the last mood and keyword from the database
         db = get_db()
         posts = db.execute(
             'SELECT mood, body'
@@ -90,9 +86,11 @@ def create_app(test_config=None):
             mood_emoji=mood_emoji,
             )
 
+    # HISTORY
     @app.route("/mcalendar/", defaults={'month':None, 'year':None},  methods=["GET", "POST"])
     @app.route("/mcalendar/<month>/<year>", methods=["GET", "POST"])
     def mcalendar(month, year):
+        # Calendar setting month/year for Today - default day
         if month is None:
             month = datetime.date.today().month
         else:
@@ -109,22 +107,30 @@ def create_app(test_config=None):
             ' ORDER BY created DESC'
         ).fetchall()
 
+        # Start the calendar in Sunday
         cal = calendar.Calendar(6)
+
         today = datetime.date.today().day
         calmonth = cal.monthdatescalendar(year,month)
+
+        # previous/next month-year functions
         previous_month, previous_year= previous_date(month, year)
         next_month, next_year= next_date(month, year)
 
+        # information from the database for the graphic. 
+        # Count(*)->returns the number of rows that matches with the same mood
         posts2 = db.execute(
             'SELECT mood, count(*)'
             ' FROM post'
             ' GROUP BY mood'
         ).fetchall()
+
         mood_labels = []
         count_mood = []
         for post in posts2:
            mood_labels.append(post['mood'])
            count_mood.append(post['count(*)'])
+
         total = sum(count_mood)
 
         return render_template(
@@ -149,21 +155,23 @@ def create_app(test_config=None):
             total=total,
             )
 
-    # happy_colour='#eada2c'
-    happy_colour='rgb(239, 207, 0, 0.7)'
-    # love_colour='#f52394'
+    # Mood Colours: 
+    # happy
+    happy_colour='red'
+    # happy_colour='rgb(239, 207, 0, 0.7)'
+    # love
     love_colour='rgb(239, 81, 94, 0.4)'
-    # enthusiastic_colour='#efa123'
+    # enthusiastic
     enthusiastic_colour='rgb(255, 148, 0, 0.7)'
-    # nerd_colour="#1093b7"
+    # nerd
     nerd_colour='rgb(4, 128, 163, 0.4)'
-    # tired_colour="#39894f"
+    # tired
     tired_colour='rgb(57, 137, 79, 0.3)'
-    #  worried_colour='#965ec4'
+    # worried
     worried_colour='rgb(86, 20, 104, 0.3)'
-    # furious_colour="#ba2112"
+    # furious
     furious_colour='rgb(186, 0, 0, 0.6)'
-    # sad_colour='#567477'
+    # sad
     sad_colour='rgb(62, 70, 71, 0.4)'
 
 
@@ -255,14 +263,17 @@ def create_app(test_config=None):
         return month , year
 
     def month_converter(month):
+        # return the number month to letters in abbreviated form.
         return calendar.month_abbr[month]
 
 
     def average(number, total):
+        # average operation and round numbers in order to have total = 100%
         total_ave= float(number) *100 / total
         return int(round(total_ave))
 
 
+    # GALLERY
     @app.route("/gallery", methods=["GET"])
     def gallery():
 
@@ -328,7 +339,7 @@ def create_app(test_config=None):
     def gallery_search():
         text = request.form["Text"]
 
-        # # Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
+        # Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
 
         url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key={}&text={}&sort=relevance&safe_search=1&per_page=20&format=json&nojsoncallback=1'
         r = requests.get(url.format(API_KEY, text)).json()
@@ -353,6 +364,7 @@ def create_app(test_config=None):
             gallery_list=gallery_list,
             )
 
+    # MUSIC
     # Requeest a token without asking user to log in
     def call_api_token():
         endpoint = "https://accounts.spotify.com/api/token"
@@ -396,16 +408,10 @@ def create_app(test_config=None):
             # print self.token
             return self.token
 
-
     # Token to access to Spotify data that do not need access to user related data
     # It is stored as class TokenStorage object
     # To get token - TOKEN.get_token(time_now)
     TOKEN = TokenStorage()
-
-    # Create params_query_string
-    def params_query_string(payload):
-        # Python2 version
-        url_arg = urllib.urlencode(payload)
 
     # Function that replace special characters in val string using the %xx escape
     def quote_params_val(val):
@@ -430,8 +436,7 @@ def create_app(test_config=None):
         # Prepare URL for search request
         url_arg = "&".join(["{}={}".format(key, quote_params_val(val))
                            for key, val in payload.items()])
-        # url_arg = params_query_string(payload)
-        # auth_url = endpoint + "/?" + url_arg
+     
         auth_url = endpoint+"?"+ url_arg
         # Get request to Spotify API to search
         search_response = requests.get(auth_url, headers=authorization_header)
@@ -441,12 +446,12 @@ def create_app(test_config=None):
 
     def search_tracks(token, query):
         '''
-        Function that searches the playlist
+        Function that searches tracks which match with the query parameters 
+        for spotify recommendations by moods.
         Input: token and playlist name
-        Returns: array of arist objects in json format
+        Returns: array of tracks objects in json format
         '''
-        # Specify that we want to search the playlist
-
+        # Get Mood from the database
         db = get_db()
         posts = db.execute(
             'SELECT body, mood'
@@ -457,7 +462,7 @@ def create_app(test_config=None):
         # change query for mood
         mood = posts['mood']
 
-
+        # Seed/Query parameters for spotify recommendations by moods
         if query == "Happy":
             payload = {
                     "seed_genres": 'happy',
@@ -507,17 +512,18 @@ def create_app(test_config=None):
                     "min_energy":'0.5',
                     }
 
-        # Return array of arist objects in json format
+        # Return array of track objects in json format
         return searh_request(token, payload)
 
 
     @app.route("/music")
     def music():
         '''
-        Ask user:
-        1) playlist to search, see playlist's top tracks, listen 30 sec preview,
-        add playlist's top tracks to user's Spotify account new playlist
-        2) Search city for upcoming gigs.
+        Ask database:
+        1) mood to search, 
+        Searching tracks with recommendations for this mood in spotify 
+        2) generated based on for a given seed entity and matched against similar artists and tracks,
+        listen 30 sec preview,
         '''
         db = get_db()
         posts = db.execute(
@@ -525,14 +531,7 @@ def create_app(test_config=None):
             ' FROM post'
             ' ORDER BY id DESC '
         ).fetchone()
-
         mood = posts['mood']
-
-        # if "tracks_uri" in session:
-        #     session.pop('tracks_uri', None)
-        # if "playlist_name" in session:
-        #     session.pop("playlist_name", None)
-
 
         # Not related to user token is stored as class TokenStorage object
         token = TOKEN.get_token(time.time())
@@ -540,7 +539,7 @@ def create_app(test_config=None):
         # Get data that user post to app on index page
         track = mood
 
-        # Get data in json format from search_playlist request
+        # Get data in json format from search_tracks request
         found_tracks = search_tracks(token, track)
 
         return render_template("music.html",
@@ -549,34 +548,6 @@ def create_app(test_config=None):
             mood_emoji = mood_emoji,
             found_tracks=found_tracks,)
 
-
-    @app.route("/login")
-    def requestAuth():
-        """
-        Application requests authorization from Spotify.
-        Step 1 in Guide
-        """
-        endpoint = "https://accounts.spotify.com/authorize"
-        payload = {
-                  "client_id": CLIENT_ID,
-                  "response_type": "code",
-                  "redirect_uri": REDIRECT_URI,
-                  # "state": "sdfdskjfhkdshfkj",
-                  "scope": "playlist-modify-public user-read-private",
-                  # "show_dialog": True
-                }
-
-        # Create query string from params
-        # url_arg = "&".join(["{}={}".format(key, quote_params_val(val)) for
-        #                    key, val in params.items()])
-        url_arg = params_query_string(payload)
-
-        # Request URL
-        auth_url = endpoint + "/?" + url_arg
-        #print "AUTH_URL", auth_url
-        # User is redirected to Spotify where user is asked to authorize access to
-        # his/her account within the scopes
-        return redirect(auth_url)
 
         db.init_app(app)
 

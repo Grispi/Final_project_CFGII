@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-</nav>
   {% block main %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ 
     <div id="gallery">
       <div class= "container text-center">
         <h1>Gallery</h1>
@@ -23,14 +22,14 @@
                 </div>
               </div>
             </form>
-          </div>
+        </div>
 
-      {% for item in gallery_list %}
+        {% for item in gallery_list %}
 
-         <a href= "{{item}}">
-           <img id="image" src="{{item}}" alt="gallery">
-          </a>
-      {% endfor %}
+          <a href= "{{item}}" target="_blank">
+            <img id="image" src="{{item}}" alt="gallery">
+            </a>
+        {% endfor %}
       </div>
     </div>
 
