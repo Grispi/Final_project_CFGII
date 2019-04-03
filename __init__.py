@@ -155,24 +155,6 @@ def create_app(test_config=None):
             total=total,
             )
 
-    # Mood Colours: 
-    # happy
-    # happy_colour='rgb(239, 207, 0, 0.7)'
-    # # love
-    # love_colour='rgb(239, 81, 94, 0.4)'
-    # # enthusiastic
-    # enthusiastic_colour='rgb(255, 148, 0, 0.7)'
-    # # nerd
-    # nerd_colour='rgb(4, 128, 163, 0.4)'
-    # # tired
-    # tired_colour='rgb(57, 137, 79, 0.3)'
-    # # worried
-    # worried_colour='rgb(86, 20, 104, 0.3)'
-    # # furious
-    # furious_colour='rgb(186, 0, 0, 0.6)'
-    # # sad
-    # sad_colour='rgb(62, 70, 71, 0.4)'
-
 
     def mood_colour(mood):
         if 'Happy' == mood:
@@ -337,7 +319,7 @@ def create_app(test_config=None):
     @app.route("/gallery2", methods=["GET", "POST"])
     def gallery_search():
         text = request.form["Text"]
-
+        
         # Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
 
         url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key={}&text={}&sort=relevance&safe_search=1&per_page=20&format=json&nojsoncallback=1'
