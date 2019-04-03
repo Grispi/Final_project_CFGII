@@ -27,6 +27,7 @@ from db import get_db
 
 port = int(os.environ.get("PORT", 5000))
 
+
 API_KEY = os.environ.get("API_KEY", None)
 
 # Spotify App data
