@@ -8,7 +8,7 @@
 <div class='container' id="calendar">
     <h2 class="text-center">Mood Calendar</h2>
     </br>
-    <div>
+    <div class="months_button">
         <a href= "{{ url_for('mcalendar', month=previous_month, year=previous_year) }}" class="btn btn-default col-sm-2" role="button">
                 previous month
         </a>
@@ -34,7 +34,7 @@
             <tr>
                 {% for calday in calweek %}   
                 {% if calday.month == month %}
-                    <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
+                    <td class="{{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
                 {% else %}
                     <td>&nbsp;</td>
                 {% endif %}
@@ -57,7 +57,7 @@
                 <table class="table" id="graph_table">
                     <tr class="table_row">
                         {% for item in mood_labels %}
-                            <th class="table_labels" style="background-color: {{ mood_colour(item) }}">{{ item }} </th>
+                            <th class="table_labels {{ mood_colour(item) }}">{{ item }} </th>
                         {% endfor %}
                     </tr>
                     <tr>
@@ -89,7 +89,7 @@
                     </tr>
                    <tbody class="table_body">
                     {% for post in posts %}
-                    <tr  style="background-color: {{ mood_colour(post['mood']) }} ">
+                    <tr  class="{{ mood_colour(post['mood']) }}">
                         <td class="table_history">{{ post['mood'] }}</td>
                         <td class="table_history">{{ post['body'] }} </td>
                         <td class="table_history"> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
@@ -119,21 +119,21 @@
     						],
 
     					backgroundColor: [
-                                    'rgb(255, 148, 0, 0.7)',//enthusiastic
+                                    'rgb(255, 177, 68)',//enthusiastic
 									//'#efa123', 
-                                    'rgb(186, 0, 0, 0.6)',//furious
+                                    'rgb(165, 74, 74)',//furious
 									//"#ba2112", 
-                                    'rgb(239, 207, 0, 0.7)',//happy
+                                    'rgb(242, 225, 118)',//happy
 									//'#eada2c', 
-                                    'rgb(239, 81, 94, 0.4)', //love
+                                    'rgb(242, 176, 182)', //love
     							    //'#f52394', 
-                                    'rgb(4, 128, 163, 0.4)',//nerd
+                                    'rgb(182, 225, 237)',//nerd
 									//'#1093b7', 
-                                    'rgb(62, 70, 71, 0.4)', //sad
+                                    'rgb(164, 165, 165)', //sad
 									//'#567477', 
-                                    'rgb(57, 137, 79, 0.3)',//tired
+                                    'rgb(163, 206, 175)',//tired
    								    //"#39894f" , 
-                                    'rgb(86, 20, 104, 0.3)',//worried
+                                    'rgb(184, 160, 191)',//worried
    								    //"#965ec4", 
                                     
     						],

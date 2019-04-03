@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+   
+
+
+<div id="music" class="sontainer text-center">
+    <div class= "container text-center">
+        <h1>Music</h1>
+        <hr>
+        <h3>Your selection of music for {{ mood }} {{mood_emoji(posts['mood']) }}!</h3>
+    </div>
+</div>
+
+<div class="container">
+    <h3>Select the track:</h3>
+        <div id="contact-form">
+            <ul class="tracks_list">
+                {% for track in found_tracks['tracks']%}
+                <li class="music_track">
+                    <a class="music_track" href="{{track['external_urls']['spotify']}}" target="_blank">
+                        {{track['name']}} by {{ track['artists'][0]['name']}}
+
+                    <audio controls class="audio_controls">
+                    <source src="track_url.ogg" type="audio/ogg">
+                    <source src="{{ track["preview_url"]}}" type="audio/mpeg">
+                    </audio>
+
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+</div>
+
+{% endblock %}
