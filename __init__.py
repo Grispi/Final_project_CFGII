@@ -157,41 +157,40 @@ def create_app(test_config=None):
 
     # Mood Colours: 
     # happy
-    happy_colour='red'
     # happy_colour='rgb(239, 207, 0, 0.7)'
-    # love
-    love_colour='rgb(239, 81, 94, 0.4)'
-    # enthusiastic
-    enthusiastic_colour='rgb(255, 148, 0, 0.7)'
-    # nerd
-    nerd_colour='rgb(4, 128, 163, 0.4)'
-    # tired
-    tired_colour='rgb(57, 137, 79, 0.3)'
-    # worried
-    worried_colour='rgb(86, 20, 104, 0.3)'
-    # furious
-    furious_colour='rgb(186, 0, 0, 0.6)'
-    # sad
-    sad_colour='rgb(62, 70, 71, 0.4)'
+    # # love
+    # love_colour='rgb(239, 81, 94, 0.4)'
+    # # enthusiastic
+    # enthusiastic_colour='rgb(255, 148, 0, 0.7)'
+    # # nerd
+    # nerd_colour='rgb(4, 128, 163, 0.4)'
+    # # tired
+    # tired_colour='rgb(57, 137, 79, 0.3)'
+    # # worried
+    # worried_colour='rgb(86, 20, 104, 0.3)'
+    # # furious
+    # furious_colour='rgb(186, 0, 0, 0.6)'
+    # # sad
+    # sad_colour='rgb(62, 70, 71, 0.4)'
 
 
     def mood_colour(mood):
         if 'Happy' == mood:
-            return happy_colour
+            return 'happy_colour'
         elif 'Love' == mood:
-            return love_colour
+            return 'love_colour'
         elif 'Enthusiastic' == mood:
-            return enthusiastic_colour
+            return 'enthusiastic_colour'
         elif 'Nerd' == mood:
-            return nerd_colour
+            return 'nerd_colour'
         elif 'Tired' == mood:
-            return tired_colour
+            return 'tired_colour'
         elif 'Worried' == mood:
-            return worried_colour
+            return 'worried_colour'
         elif 'Furious' == mood:
-            return furious_colour
+            return 'furious_colour'
         elif 'Sad' == mood:
-            return sad_colour
+            return 'sad_colour'
         else:
             return''
 
@@ -226,21 +225,21 @@ def create_app(test_config=None):
             if date.strftime("%Y-%m-%d") == post['created'].strftime("%Y-%m-%d"):
                 mood = post['mood']
                 if 'Happy' == mood:
-                    return happy_colour
+                    return 'happy_colour'
                 elif 'Love' == mood:
-                    return love_colour
+                    return 'love_colour'
                 elif 'Enthusiastic' == mood:
-                    return enthusiastic_colour
+                    return 'enthusiastic_colour'
                 elif 'Nerd' == mood:
-                    return nerd_colour
+                    return 'nerd_colour'
                 elif 'Tired' == mood:
-                    return tired_colour
+                    return 'tired_colour'
                 elif 'Worried' == mood:
-                    return worried_colour
+                    return 'worried_colour'
                 elif 'Furious' == mood:
-                    return furious_colour
+                    return 'furious_colour'
                 elif 'Sad' == mood:
-                    return sad_colour
+                    return 'sad_colour'
         return ''
 
     def previous_date(month , year1):

@@ -34,7 +34,7 @@
             <tr>
                 {% for calday in calweek %}   
                 {% if calday.month == month %}
-                    <td style="background-color: {{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
+                    <td class="{{ mood_colour_cal(calday, posts) }}"> {{ (calday.day) }} <p class="center-text"> {{ mood_emoji(find_mood_for_date(calday, posts)) }}</p></td>
                 {% else %}
                     <td>&nbsp;</td>
                 {% endif %}
@@ -57,7 +57,7 @@
                 <table class="table" id="graph_table">
                     <tr class="table_row">
                         {% for item in mood_labels %}
-                            <th class="table_labels" style="background-color: {{ mood_colour(item) }}">{{ item }} </th>
+                            <th class="table_labels {{ mood_colour(item) }}">{{ item }} </th>
                         {% endfor %}
                     </tr>
                     <tr>
@@ -89,7 +89,7 @@
                     </tr>
                    <tbody class="table_body">
                     {% for post in posts %}
-                    <tr  style="background-color: {{ mood_colour(post['mood']) }} ">
+                    <tr  class="{{ mood_colour(post['mood']) }}">
                         <td class="table_history">{{ post['mood'] }}</td>
                         <td class="table_history">{{ post['body'] }} </td>
                         <td class="table_history"> {{ post['created'].strftime('%d-%m-%Y')  }}</td>
