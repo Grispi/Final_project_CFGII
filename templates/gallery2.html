@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+</nav>
+  {% block main %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <div id="gallery">
+      <div class= "container text-center">
+        <h1>Gallery</h1>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <p>... Some more pictures for you </p>
+          </div>
+            <form action="/gallery2" method="post">
+              <div class="col-xs-3 col-xs-offset-2">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Refine your Search" name="Text"/>
+                  <div class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">
+                      <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+      {% for item in gallery_list %}
+
+         <a href= "{{item}}">
+           <img id="image" src="{{item}}" alt="gallery">
+          </a>
+      {% endfor %}
+      </div>
+    </div>
+
+  {% endblock %}
+{% endblock %}

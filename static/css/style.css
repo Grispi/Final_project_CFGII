@@ -113,6 +113,41 @@ p {
   margin-left: auto;
 }
 
+#gallery button.btn.btn-primary{
+  background-color: gray;
+  border-color: gray;
+}
+
+label#purple.btn.btn-primary{
+  background-color: #8c20ba;
+  border-color: #8c20ba;
+}
+
+label#yellow.btn.btn-primary{
+  background-color: #eada2c;
+  border-color: #eada2c;
+}
+label#green.btn.btn-primary{
+  background-color: #39894f;
+  border-color: #39894f;
+}
+/* # happy_colour='#eada2c'
+  happy_colour='rgb(239, 207, 0, 0.7)'
+  # love_colour='#f52394'
+  love_colour='rgb(239, 81, 94, 0.4)'
+  # enthusiastic_colour='#efa123'
+  enthusiastic_colour='rgb(255, 148, 0, 0.7)'
+  # nerd_colour="#1093b7"
+  nerd_colour='rgb(4, 128, 163, 0.4)'
+  # tired_colour="#39894f"
+  tired_colour='rgb(57, 137, 79, 0.3)'
+  #  worried_colour='#965ec4'
+  worried_colour='rgb(86, 20, 104, 0.3)'
+  # furious_colour="#ba2112"
+  furious_colour='rgb(186, 0, 0, 0.6)'
+  # sad_colour='#567477'
+  sad_colour='rgb(62, 70, 71, 0.4)' */
+
 header{
   margin-top: 10%;
   text-align: center;

@@ -29,11 +29,15 @@ from pprint import pprint
 
 port = int(os.environ.get("PORT", 5000))
 
-API_KEY = os.environ.get("API_KEY", None)
+# API_KEY = os.environ.get("API_KEY", None)
+#
+# # Spotify App data
+# CLIENT_ID = os.environ.get("CLIENT_ID", None)
+# CLIENT_SECRET = os.environ.get("CLIENT_SECRET", None)
+API_KEY = "a33ea2b039e32abade45a6e1b1b87670"
+CLIENT_ID = "f61666ad56b74fbbb4d0b6862df29f95"
+CLIENT_SECRET = "ba5283bbb94a401ba624d82b78b287f3"
 
-# Spotify App data
-CLIENT_ID = os.environ.get("CLIENT_ID", None)
-CLIENT_SECRET = os.environ.get("CLIENT_SECRET", None)
 
 def create_app(test_config=None):
     #create and configure the app
@@ -323,6 +327,35 @@ def create_app(test_config=None):
             mood_emoji=mood_emoji,
             gallery_list=gallery_list,
             body_lower=body_lower
+            )
+
+    @app.route("/gallery2", methods=["GET", "POST"])
+    def gallery_search():
+        text = request.form["Text"]
+
+        # # Super handy to see if I am getting data -- remember to remove .json() from req to perform this test
+
+        url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key={}&text={}&sort=relevance&safe_search=1&per_page=20&format=json&nojsoncallback=1'
+        r = requests.get(url.format(API_KEY, text)).json()
+        # json_object = r.text
+        # return json_object
+
+        gallery_list = list()
+
+        for item in r['photos']['photo']:
+            id = item["id"]
+            farm = item["farm"]
+            server = item["server"]
+            secret = item["secret"]
+            img_url = "https://farm{}.staticflickr.com/{}/{}_{}.jpg"
+            img_url_formated = img_url.format(farm, server, id, secret)
+            gallery_list.append(img_url_formated)
+
+        #print (gallery_list)
+
+        return render_template(
+            "gallery2.html",
+            gallery_list=gallery_list,
             )
 
     # Requeest a token without asking user to log in
