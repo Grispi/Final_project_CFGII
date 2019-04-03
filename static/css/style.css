@@ -301,26 +301,34 @@ h2{
 }
 
 .happy_colour{
+  background-color: rgb(239, 207, 0); /* The Fallback */
   background-color: rgb(239, 207, 0, 0.7);
 }
 .love_colour{
+  background-color: rgb(239, 81, 94); /* The Fallback */
   background-color: rgb(239, 81, 94, 0.4);
 }
 .enthusiastic_colour{
+  background-color: rgb(255, 148, 0); /* The Fallback */
   background-color: rgb(255, 148, 0, 0.7);
 }
 .nerd_colour{
+  background-color:rgb(4, 128, 163); /* The Fallback */
   background-color:rgb(4, 128, 163, 0.4);
 }
 .tired_colour{
+  background-color:rgb(57, 137, 79); /* The Fallback */
   background-color:rgb(57, 137, 79, 0.3);
 }
 .worried_colour{
+  background-color:rgb(86, 20, 104);/* The Fallback */
   background-color:rgb(86, 20, 104, 0.3);
 }
 .furious_colour{
+  background-color:rgb(186, 0, 0);/* The Fallback */
   background-color:rgb(186, 0, 0, 0.6);
 }
 .sad_colour{
+  background-color:rgb(62, 70, 71); /* The Fallback */
   background-color:rgb(62, 70, 71, 0.4);
 }
