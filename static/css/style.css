@@ -269,14 +269,33 @@ h2{
   list-style-type: none;
   margin: 0;
 }
+.container.text-center{
+  padding-bottom: 30px;
+}
 .music_track{
   color: black;
   font-size: 19px;
-  margin: 20px 0;
+  margin: 15px 0;
+  font-style: normal;
 }
 
+.music_track a:hover {
+  /* background-color: #993007; */
+  border-radius: 5px;
+  /* color: #fff; */
+  /* color: hotpink; */
+  color: #1DB954;
+  text-decoration: none;
+}
+
+.music_track a:visited {
+  color: #1DB954;
+  text-decoration: none !important;
+}
+#contact-form{
+  text-align: center;
+}
 .audio_controls{
-  margin: 14px 0 30px 150px;
-  display: grid;
-  color: black;
+ margin: 0px 0 0px 30px; 
+ color: black;
 }

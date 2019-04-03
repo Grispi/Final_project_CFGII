@@ -9,8 +9,6 @@ import math
 import sys
 import time
 import urllib
-import tweepy
-
 
 from flask import Flask, render_template, request, flash, g, redirect, url_for, session
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +17,7 @@ from requests.auth import HTTPBasicAuth
 import db
 from db import get_db
 
-from pprint import pprint
+# from pprint import pprint
 
 # from werkzeug.exceptions import abort
 
